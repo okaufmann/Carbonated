@@ -4,7 +4,7 @@ namespace JerseyMilker;
 
 use Carbon\Carbon;
 
-trait CarbonatedDateTime {
+trait Carbonated {
 
     /**
      * Store carbon instances for use by carbon accessor.
@@ -20,7 +20,7 @@ trait CarbonatedDateTime {
      */
     public function carbonatedTimestampFormat()
     {
-        return ($this->carbonateTimestampFormat) ? $this->carbonateTimestampFormat : 'M d, Y g:ia';
+        return ($this->carbonatedTimestampFormat) ? $this->carbonatedTimestampFormat : 'M d, Y g:ia';
     }
 
     /**
@@ -30,7 +30,7 @@ trait CarbonatedDateTime {
      */
     public function carbonatedDateFormat()
     {
-        return ($this->carbonateDateFormat) ? $this->carbonateDateFormat : 'M d, Y';
+        return ($this->carbonatedDateFormat) ? $this->carbonatedDateFormat : 'M d, Y';
     }
 
     /**
@@ -40,7 +40,7 @@ trait CarbonatedDateTime {
      */
     public function carbonatedTimeFormat()
     {
-        return ($this->carbonateTimeFormat) ? $this->carbonateTimeFormat : 'g:ia';
+        return ($this->carbonatedTimeFormat) ? $this->carbonatedTimeFormat : 'g:ia';
     }
 
     /**
@@ -51,8 +51,8 @@ trait CarbonatedDateTime {
     public function carbonatedTimezone()
     {
         // Check for timezone property in this class.
-        if ($this->timezone) {
-            return $this->timezone;
+        if ($this->carbonatedTimezone) {
+            return $this->carbonatedTimezone;
         }
 
         // If not, check for timezone in authenticated User class.
@@ -143,7 +143,7 @@ trait CarbonatedDateTime {
     {
         $defaults = [static::CREATED_AT, static::UPDATED_AT, 'deleted_at'];
 
-        return (isset($this->carbonateTimestamps)) ? array_merge($this->carbonateTimestamps, $defaults) : $defaults;
+        return (isset($this->carbonatedTimestamps)) ? array_merge($this->carbonatedTimestamps, $defaults) : $defaults;
     }
 
     /**
@@ -153,7 +153,7 @@ trait CarbonatedDateTime {
      */
     protected function getCarbonatedDates()
     {
-        return (isset($this->carbonateDates)) ? (array) $this->carbonateDates : [];
+        return (isset($this->carbonatedDates)) ? (array) $this->carbonatedDates : [];
     }
 
     /**
@@ -163,7 +163,7 @@ trait CarbonatedDateTime {
      */
     protected function getCarbonatedTimes()
     {
-        return (isset($this->carbonateTimes)) ? (array) $this->carbonateTimes : [];
+        return (isset($this->carbonatedTimes)) ? (array) $this->carbonatedTimes : [];
     }
 
     /**
