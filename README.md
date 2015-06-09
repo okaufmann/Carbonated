@@ -21,7 +21,7 @@ Eloquent provides DateTime handling through [Date Mutators](http://laravel.com/d
 
 # Basic Usage
 
-- Use Carbonated trait in your Eloquent model.
+Use Carbonated trait in your Eloquent model.
 ```php
 <?php namespace App;
 
@@ -34,32 +34,33 @@ class ServiceOrder extends Model {
 }
 ```
 
-- Add timestamp, date, and time fields to their respective carbonated model properties.
+Add timestamp, date, and time fields to their respective carbonated model properties.
 ```php
 public $carbonatedTimestamps = ['created_at', 'updated_at'];
 public $carbonatedDates = ['required_by', 'completed_on', 'invoiced_on'];
 public $carbonatedTimes = ['pickup_time'];
 ```
 
-- By default, all properties now have accessors and mutators applied with sensible view formatting.
+By default, all properties now have accessors and mutators applied with sensible view formatting.
 ```php
 {{ $serviceOrder->created_at }} // outputs 'Jun 09, 2015 4:10pm'
 {{ $serviceOrder->required_by }} // outputs 'Jul 30, 2015'
 {{ $serviceOrder->pickup_time }} // outputs '10:30am'
+```
 
-- Customize output format by adding these properties.
+Customize output format by adding these properties.
 ```php
 public $carbonatedTimestampFormat = 'M d, Y g:ia';
 public $carbonatedDateFormat = 'M d, Y';
 public $carbonatedTimeFormat = 'g:ia';
 ```
 
-- If you want to reformat output in your view, the `carbon` attribute holds raw carbon instances necessary for this.
+If you want to reformat output in your view, the `carbon` attribute holds raw carbon instances necessary for this.
 ```php
 {{ $serviceOrder->carbon->required_by->format('M Y') }}
 ```
 
-- You can also override the automatic accessors and mutators by providing your own [Accessor and Mutator](http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators) methods in your model.
+You can also override the automatic accessors and mutators by providing your own [Accessor and Mutator](http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators) methods in your model.
 ```php
 public function getRequiredByAttribute()
 {
@@ -71,12 +72,12 @@ public function getRequiredByAttribute()
 
 Eloquent-Carbonated supports automatic timezone conversion between database and view output.  If your app timezone (in `/config/app.php`) is set to `UTC`, but you want to display `America/Toronto` to your end users, two options are available:
 
-- You can set timezone using the following property in your model.
+You can set timezone using the following property in your model.
 ```php
 public $carbonatedTimezone = 'America/Toronto';
 ```
 
-- If the above property is not available in your model, Eloquent-Carbonated will search the currently authenticated User object for a `getTimezone()` method.  This allows the User model be responsible for User specific timezones.
+If the above property is not available in your model, Eloquent-Carbonated will search the currently authenticated User object for a `getTimezone()` method.  This allows the User model be responsible for User specific timezones.
 ```php
 public function getTimezone()
 {
