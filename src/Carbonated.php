@@ -20,7 +20,7 @@ trait Carbonated {
      */
     public function carbonatedTimestampFormat()
     {
-        return ($this->carbonatedTimestampFormat) ? $this->carbonatedTimestampFormat : 'M d, Y g:ia';
+        return (isset($this->carbonatedTimestampFormat)) ? $this->carbonatedTimestampFormat : 'M d, Y g:ia';
     }
 
     /**
@@ -30,7 +30,7 @@ trait Carbonated {
      */
     public function carbonatedDateFormat()
     {
-        return ($this->carbonatedDateFormat) ? $this->carbonatedDateFormat : 'M d, Y';
+        return (isset($this->carbonatedDateFormat)) ? $this->carbonatedDateFormat : 'M d, Y';
     }
 
     /**
@@ -40,7 +40,7 @@ trait Carbonated {
      */
     public function carbonatedTimeFormat()
     {
-        return ($this->carbonatedTimeFormat) ? $this->carbonatedTimeFormat : 'g:ia';
+        return (isset($this->carbonatedTimeFormat)) ? $this->carbonatedTimeFormat : 'g:ia';
     }
 
     /**
@@ -51,7 +51,7 @@ trait Carbonated {
     public function carbonatedTimezone()
     {
         // Check for timezone property in this class.
-        if ($this->carbonatedTimezone) {
+        if (isset($this->carbonatedTimezone)) {
             return $this->carbonatedTimezone;
         }
 
