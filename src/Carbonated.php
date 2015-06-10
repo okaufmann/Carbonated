@@ -57,7 +57,9 @@ trait Carbonated {
 
         // If not, check for Auth::user() with a getTimezone() method.
         elseif (class_exists(\Auth::class) && \Auth::check() && method_exists(config('auth.model'), 'getTimezone')) {
-            return \Auth::user()->getTimezone();
+            if (\Auth::user()->getTimezone()) {
+                return \Auth::user()->getTimezone();
+            }
         }
 
         // Otherwise return timezone setting from app config.
