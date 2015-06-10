@@ -2,13 +2,11 @@
 
 An Eloquent model trait that offers more flexible timestamp/date/time handling.
 
+Eloquent provides DateTime handling through [Date Mutators](http://laravel.com/docs/5.1/eloquent-mutators#date-mutators).  However, it can be cumbersome having to set [Accessors](http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators) for custom DateTime formatting in your views, and [Mutators](http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators) to correct custom DateTime formatting coming into your database.  Also, time field handling and timezone conversion are non-existent.  Carbonated aims to help you withthese things.
+
 # Requirements
 
 - [Laravel 5.0+](http://laravel.com) or [illuminate/database 5.0+](https://github.com/illuminate/database/tree/master)
-
-# Introduction
-
-Eloquent provides DateTime handling through [Date Mutators](http://laravel.com/docs/5.1/eloquent-mutators#date-mutators).  However, it can be cumbersome having to set [Accessors](http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators) for custom DateTime formatting in your views, and [Mutators](http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators) to correct custom DateTime formatting coming into your database.  Also, time field handling and timezone conversion are non-existent.  Carbonated aims to help you withthese things.
 
 # Feature Overview
 
@@ -18,6 +16,13 @@ Eloquent provides DateTime handling through [Date Mutators](http://laravel.com/d
 - Carbon instances are still available when you need to `format()` output.
 - Timezone support with automatic conversion between database and view output.
 - Plays friendly with [form generators](https://github.com/adamwathan/form) that use [model binding](https://github.com/adamwathan/form#model-binding).
+
+# Installation
+
+Via [Composer](https://getcomposer.org):
+```
+composer require 'jerseymilker/carbonated:dev-master'
+```
 
 # Basic Usage
 
