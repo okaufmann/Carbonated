@@ -1,4 +1,4 @@
-# Eloquent-Carbonated
+# Carbonated
 
 An Eloquent model trait that offers more flexible timestamp/date/time handling.
 
@@ -8,7 +8,7 @@ An Eloquent model trait that offers more flexible timestamp/date/time handling.
 
 # Introduction
 
-Eloquent provides DateTime handling through [Date Mutators](http://laravel.com/docs/5.1/eloquent-mutators#date-mutators).  However, it can be cumbersome having to set [Accessors](http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators) for custom DateTime formatting in your views, and [Mutators](http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators) to correct custom DateTime formatting coming into your database.  Also, time field handling and timezone conversion are non-existent.  Eloquent-Carbonated aims to help you withthese things.
+Eloquent provides DateTime handling through [Date Mutators](http://laravel.com/docs/5.1/eloquent-mutators#date-mutators).  However, it can be cumbersome having to set [Accessors](http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators) for custom DateTime formatting in your views, and [Mutators](http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators) to correct custom DateTime formatting coming into your database.  Also, time field handling and timezone conversion are non-existent.  Carbonated aims to help you withthese things.
 
 # Feature Overview
 
@@ -70,14 +70,14 @@ public function getRequiredByAttribute()
 
 # Timezone Support
 
-Eloquent-Carbonated supports automatic timezone conversion between database and view output.  If your app timezone (in `/config/app.php`) is set to `UTC`, but you want to display `America/Toronto` to your end users, two options are available:
+Carbonated supports automatic timezone conversion between database and view output.  If your app timezone (in `/config/app.php`) is set to `UTC`, but you want to display `America/Toronto` to your end users, two options are available:
 
 You can set timezone using the following property in your model.
 ```php
 public $carbonatedTimezone = 'America/Toronto';
 ```
 
-If the above property is not available in your model, Eloquent-Carbonated will search the currently authenticated User object for a `getTimezone()` method.  This allows the User model be responsible for User specific timezones.
+If the above property is not available in your model, Carbonated will search the currently authenticated User object for a `getTimezone()` method.  This allows the User model be responsible for User specific timezones.
 ```php
 public function getTimezone()
 {
