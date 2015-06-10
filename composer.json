@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "JerseyMilker\\Carbonated\\": "src/"
+            "JerseyMilker": "src/"
         }
     },
     "minimum-stability": "dev"
