@@ -50,17 +50,17 @@ trait Carbonated {
      */
     public function carbonatedTimezone()
     {
-        // Check for timezone property in this class.
+        // Check for $carbonatedTimezone property in model.
         if (isset($this->carbonatedTimezone)) {
             return $this->carbonatedTimezone;
         }
 
-        // If not, check for timezone in authenticated User class.
+        // If not, check for Auth::user() with a getTimezone() method.
         elseif (class_exists(\Auth::class) && \Auth::check() && method_exists(config('auth.model'), 'getTimezone')) {
             return \Auth::user()->getTimezone();
         }
 
-        // Otherwise return timezone setting from config.
+        // Otherwise return timezone setting from app config.
         return config('app.timezone');
     }
 
