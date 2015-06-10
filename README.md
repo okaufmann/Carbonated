@@ -89,7 +89,3 @@ public function getTimezone()
     return $this->timezone;
 }
 ```
-
-# To-Do:
-
-- Everything crashes and burns if `\Auth::user()` is not available for checking timezone :/  Will fix soon.
