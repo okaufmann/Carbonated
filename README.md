@@ -48,9 +48,9 @@ public $carbonatedTimes = ['pickup_time'];
 
 By default, all properties now have accessors and mutators applied with sensible view formatting.
 ```php
-{{ $serviceOrder->created_at }} // outputs 'Jun 09, 2015 4:10pm'
-{{ $serviceOrder->required_by }} // outputs 'Jul 30, 2015'
-{{ $serviceOrder->pickup_time }} // outputs '10:30am'
+{{ $serviceOrder->created_at }}  // Outputs 'Jun 09, 2015 4:10pm'.
+{{ $serviceOrder->required_by }} // Outputs 'Jul 30, 2015'.
+{{ $serviceOrder->pickup_time }} // Outputs '10:30am'.
 ```
 
 Customize output format by adding these properties.
