@@ -1,0 +1,21 @@
+{
+    "name": "jerseymilker/carbonated",
+    "description": "An Eloquent model trait that offers more flexible timestamp/date/time handling.",
+    "authors": [
+        {
+            "name": "Jesse Leite",
+            "email": "jesseleite@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.4.0"
+        "illuminate/database": "5.*",
+    },
+    "autoload": {
+        "psr-4": {
+            "JerseyMilker\\Carbonated\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
