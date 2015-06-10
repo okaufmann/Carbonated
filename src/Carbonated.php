@@ -56,8 +56,7 @@ trait Carbonated {
         }
 
         // If not, check for timezone in authenticated User class.
-        // TODO: Avoid error when app does not have user authentication?
-        elseif (\Auth::check() && method_exists(config('auth.model'), 'getTimezone')) {
+        elseif (class_exists(\Auth::class) && \Auth::check() && method_exists(config('auth.model'), 'getTimezone')) {
             return \Auth::user()->getTimezone();
         }
 
