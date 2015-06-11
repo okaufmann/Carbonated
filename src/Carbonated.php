@@ -152,6 +152,7 @@ trait Carbonated {
      */
     protected function getCarbonatedTimestamps()
     {
+        // Add default timestamp fields created by migrations schema builder.
         $defaults = [static::CREATED_AT, static::UPDATED_AT, 'deleted_at'];
 
         return (isset($this->carbonatedTimestamps)) ? array_unique(array_merge($this->carbonatedTimestamps, $defaults)) : $defaults;
@@ -218,13 +219,22 @@ trait Carbonated {
      */
     protected function storableTimestamp($value)
     {
-        // If Eloquent returns a fresh timestamp, it will already be a carbon object with timezone for database.
+        // If Eloquent returns value via freshTimestamp(), it will already be a carbon object.
         if (is_object($value)) {
-            return $value->format($this->databaseTimestampFormat());
+            $databaseFormat = $this->databaseTimestampFormat();
+
+            // All we need to do is convert to storable value.
+            return $value->format($databaseFormat);
         }
 
-        // Otherwise carbonate incoming string before reformatting.
-        return ($value) ? Carbon::createFromFormat($this->carbonatedTimestampFormat(), $value, $this->carbonatedTimezone())->timezone($this->databaseTimezone())->format($this->databaseTimestampFormat()) : null;
+        // Otherwise get necessary data for conversion.
+        $carbonatedFormat = $this->carbonatedTimestampFormat();
+        $databaseFormat = $this->databaseTimestampFormat();
+        $carbonatedTimezone = $this->carbonatedTimezone();
+        $databaseTimezone = $this->databaseTimezone();
+
+        // Return storable value.
+        return ($value) ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone)->timezone($databaseTimezone)->format($databaseFormat) : null;
     }
 
     /**
@@ -235,7 +245,14 @@ trait Carbonated {
      */
     protected function storableDate($value)
     {
-        return ($value) ? Carbon::createFromFormat($this->carbonatedDateFormat(), $value, $this->carbonatedTimezone())->timezone($this->databaseTimezone())->format($this->databaseDateFormat()) : null;
+        // Get necessary data for conversion.
+        $carbonatedFormat = $this->carbonatedDateFormat();
+        $databaseFormat = $this->databaseDateFormat();
+        $carbonatedTimezone = $this->carbonatedTimezone();
+        $databaseTimezone = $this->databaseTimezone();
+
+        // Return storable value.
+        return ($value) ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone)->timezone($databaseTimezone)->format($databaseFormat) : null;
     }
 
     /**
@@ -246,7 +263,14 @@ trait Carbonated {
      */
     protected function storableTime($value)
     {
-        return ($value) ? Carbon::createFromFormat($this->carbonatedTimeFormat(), $value, $this->carbonatedTimezone())->timezone($this->databaseTimezone())->format($this->databaseTimeFormat()) : null;
+        // Get necessary data for conversion.
+        $carbonatedFormat = $this->carbonatedTimeFormat();
+        $databaseFormat = $this->databaseTimeFormat();
+        $carbonatedTimezone = $this->carbonatedTimezone();
+        $databaseTimezone = $this->databaseTimezone();
+
+        // Return storable value.
+        return ($value) ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone)->timezone($databaseTimezone)->format($databaseFormat) : null;
     }
 
     /**
