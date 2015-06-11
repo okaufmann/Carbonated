@@ -46,7 +46,7 @@ public $carbonatedDates = ['required_by', 'completed_on', 'invoiced_on'];
 public $carbonatedTimes = ['pickup_time'];
 ```
 
-By default, all properties now have accessors and mutators applied with sensible formatting for your front end.
+Accessors and mutators are automatically applied with sensible formatting for your front end.
 ```php
 {{ $serviceOrder->created_at }}  // Outputs 'Jun 09, 2015 4:10pm'.
 {{ $serviceOrder->required_by }} // Outputs 'Jul 30, 2015'.
