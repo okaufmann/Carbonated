@@ -62,8 +62,8 @@ trait Carbonated {
             }
         }
 
-        // Otherwise return timezone setting from app config.
-        return config('app.timezone');
+        // Otherwise just use same timezone as database.
+        return $this->databaseTimezone();
     }
 
     /**
@@ -73,7 +73,7 @@ trait Carbonated {
      */
     protected function databaseTimestampFormat()
     {
-        return 'Y-m-d H:i:s';
+        return (isset($this->databaseTimestampFormat)) ? $this->databaseTimestampFormat : 'Y-m-d H:i:s';
     }
 
     /**
@@ -83,7 +83,7 @@ trait Carbonated {
      */
     protected function databaseDateFormat()
     {
-        return 'Y-m-d';
+        return (isset($this->databaseDateFormat)) ? $this->databaseDateFormat : 'Y-m-d';
     }
 
     /**
@@ -93,7 +93,7 @@ trait Carbonated {
      */
     protected function databaseTimeFormat()
     {
-        return 'H:i:s';
+        return (isset($this->databaseTimeFormat)) ? $this->databaseTimeFormat : 'H:i:s';
     }
 
     /**
@@ -103,7 +103,7 @@ trait Carbonated {
      */
     protected function databaseTimezone()
     {
-        return config('app.timezone');
+        return (isset($this->databaseTimezone)) ? $this->databaseTimezone : config('app.timezone');
     }
 
     /**
