@@ -62,7 +62,7 @@ trait Carbonated {
             }
         }
 
-        // Otherwise just use same timezone as database.
+        // Otherwise use same timezone as database.
         return $this->databaseTimezone();
     }
 
