@@ -144,7 +144,7 @@ trait Carbonated {
     {
         $defaults = [static::CREATED_AT, static::UPDATED_AT, 'deleted_at'];
 
-        return (isset($this->carbonatedTimestamps)) ? array_merge($this->carbonatedTimestamps, $defaults) : $defaults;
+        return (isset($this->carbonatedTimestamps)) ? array_unique(array_merge($this->carbonatedTimestamps, $defaults)) : $defaults;
     }
 
     /**
