@@ -46,7 +46,7 @@ public $carbonatedDates = ['required_by', 'completed_on', 'invoiced_on'];
 public $carbonatedTimes = ['pickup_time'];
 ```
 
-By default, all properties now have accessors and mutators applied with sensible view formatting.
+By default, all properties now have accessors and mutators applied with sensible formatting for your front end.
 ```php
 {{ $serviceOrder->created_at }}  // Outputs 'Jun 09, 2015 4:10pm'.
 {{ $serviceOrder->required_by }} // Outputs 'Jul 30, 2015'.
@@ -60,7 +60,7 @@ public $carbonatedDateFormat = 'M d, Y';
 public $carbonatedTimeFormat = 'g:ia';
 ```
 
-If you want to reformat output in your view, the `carbon` attribute holds raw carbon instances necessary for this.
+If you need access to raw carbon instances, you can access these through the `carbon` attribute.
 ```php
 {{ $serviceOrder->carbon->required_by->format('M Y') }}
 ```
