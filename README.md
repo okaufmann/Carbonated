@@ -67,14 +67,14 @@ If you need access to raw carbon instances, you can access these through the `ca
 
 # Customization
 
-Customize output format by adding these properties.
+Customize output format by adding these properties to your model.
 ```php
 public $carbonatedTimestampFormat = 'M d, Y g:ia';
 public $carbonatedDateFormat = 'M d, Y';
 public $carbonatedTimeFormat = 'g:ia';
 ```
 
-Customize storage format by adding these properties.
+Customize storage format by adding these properties to your model.
 ```php
 public $databaseTimestampFormat = 'Y-m-d H:i:s';
 public $databaseDateFormat = 'Y-m-d';
@@ -91,9 +91,9 @@ public function getRequiredByAttribute()
 
 # Timezone Conversion
 
-Carbonated supports automatic timezone conversion between your database and front end.  If you are storing as `UTC`, but you want to display as `America/Toronto` to your end users, two options are available:
+Carbonated supports automatic timezone conversion between your database and front end.  For example, maybe you are storing as `UTC` in your database, but want to display as `America/Toronto` in your front end.
 
-You can set explicitly set your timezones using the following properties in your model.
+You can set explicitly set your timezones by adding these properties to your model.
 ```php
 public $carbonatedTimezone = 'America/Toronto';
 public $databaseTimezone = 'UTC';
