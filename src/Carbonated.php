@@ -20,7 +20,7 @@ trait Carbonated {
      */
     public function carbonatedTimestampFormat()
     {
-        return (isset($this->carbonatedTimestampFormat)) ? $this->carbonatedTimestampFormat : 'M d, Y g:ia';
+        return isset($this->carbonatedTimestampFormat) ? $this->carbonatedTimestampFormat : 'M d, Y g:ia';
     }
 
     /**
@@ -30,7 +30,7 @@ trait Carbonated {
      */
     public function carbonatedDateFormat()
     {
-        return (isset($this->carbonatedDateFormat)) ? $this->carbonatedDateFormat : 'M d, Y';
+        return isset($this->carbonatedDateFormat) ? $this->carbonatedDateFormat : 'M d, Y';
     }
 
     /**
@@ -40,7 +40,7 @@ trait Carbonated {
      */
     public function carbonatedTimeFormat()
     {
-        return (isset($this->carbonatedTimeFormat)) ? $this->carbonatedTimeFormat : 'g:ia';
+        return isset($this->carbonatedTimeFormat) ? $this->carbonatedTimeFormat : 'g:ia';
     }
 
     /**
@@ -73,7 +73,7 @@ trait Carbonated {
      */
     protected function databaseTimestampFormat()
     {
-        return (isset($this->databaseTimestampFormat)) ? $this->databaseTimestampFormat : 'Y-m-d H:i:s';
+        return isset($this->databaseTimestampFormat) ? $this->databaseTimestampFormat : 'Y-m-d H:i:s';
     }
 
     /**
@@ -83,7 +83,7 @@ trait Carbonated {
      */
     protected function databaseDateFormat()
     {
-        return (isset($this->databaseDateFormat)) ? $this->databaseDateFormat : 'Y-m-d';
+        return isset($this->databaseDateFormat) ? $this->databaseDateFormat : 'Y-m-d';
     }
 
     /**
@@ -93,7 +93,7 @@ trait Carbonated {
      */
     protected function databaseTimeFormat()
     {
-        return (isset($this->databaseTimeFormat)) ? $this->databaseTimeFormat : 'H:i:s';
+        return isset($this->databaseTimeFormat) ? $this->databaseTimeFormat : 'H:i:s';
     }
 
     /**
@@ -103,7 +103,7 @@ trait Carbonated {
      */
     protected function databaseTimezone()
     {
-        return (isset($this->databaseTimezone)) ? $this->databaseTimezone : config('app.timezone');
+        return isset($this->databaseTimezone) ? $this->databaseTimezone : config('app.timezone');
     }
 
     /**
@@ -140,7 +140,7 @@ trait Carbonated {
         }
 
         // And store carbon instances for future use.
-        $this->carbonatedInstances = ($carbonInstances) ? (object) $carbonInstances : null;
+        $this->carbonatedInstances = isset($carbonInstances) ? (object) $carbonInstances : null;
 
         return $this->carbonatedInstances;
     }
@@ -155,7 +155,7 @@ trait Carbonated {
         // Add default timestamp fields created by migrations schema builder.
         $defaults = [static::CREATED_AT, static::UPDATED_AT, 'deleted_at'];
 
-        return (isset($this->carbonatedTimestamps)) ? array_unique(array_merge($this->carbonatedTimestamps, $defaults)) : $defaults;
+        return isset($this->carbonatedTimestamps) ? array_unique(array_merge($this->carbonatedTimestamps, $defaults)) : $defaults;
     }
 
     /**
@@ -165,7 +165,7 @@ trait Carbonated {
      */
     protected function getCarbonatedDates()
     {
-        return (isset($this->carbonatedDates)) ? (array) $this->carbonatedDates : [];
+        return isset($this->carbonatedDates) ? (array) $this->carbonatedDates : [];
     }
 
     /**
@@ -175,7 +175,7 @@ trait Carbonated {
      */
     protected function getCarbonatedTimes()
     {
-        return (isset($this->carbonatedTimes)) ? (array) $this->carbonatedTimes : [];
+        return isset($this->carbonatedTimes) ? (array) $this->carbonatedTimes : [];
     }
 
     /**
@@ -234,7 +234,7 @@ trait Carbonated {
         $databaseTimezone = $this->databaseTimezone();
 
         // Return storable value.
-        return ($value) ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone)->timezone($databaseTimezone)->format($databaseFormat) : null;
+        return $value ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone)->timezone($databaseTimezone)->format($databaseFormat) : null;
     }
 
     /**
@@ -252,7 +252,7 @@ trait Carbonated {
         $databaseTimezone = $this->databaseTimezone();
 
         // Return storable value.
-        return ($value) ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone)->timezone($databaseTimezone)->format($databaseFormat) : null;
+        return $value ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone)->timezone($databaseTimezone)->format($databaseFormat) : null;
     }
 
     /**
@@ -270,7 +270,7 @@ trait Carbonated {
         $databaseTimezone = $this->databaseTimezone();
 
         // Return storable value.
-        return ($value) ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone)->timezone($databaseTimezone)->format($databaseFormat) : null;
+        return $value ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone)->timezone($databaseTimezone)->format($databaseFormat) : null;
     }
 
     /**
