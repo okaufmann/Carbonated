@@ -4,8 +4,8 @@ namespace JerseyMilker;
 
 use Carbon\Carbon;
 
-trait Carbonated {
-
+trait Carbonated
+{
     /**
      * Store carbon instances for use by carbon accessor.
      *
@@ -320,9 +320,7 @@ trait Carbonated {
         // Otherwise, revert to default Eloquent behavour.
         if ($this->hasCast($key)) {
             $value = $this->castAttribute($key, $value);
-        }
-
-        elseif (in_array($key, $this->getDates())) {
+        } elseif (in_array($key, $this->getDates())) {
             if (!is_null($value)) {
                 return $this->asDateTime($value);
             }
@@ -367,5 +365,4 @@ trait Carbonated {
 
         $this->attributes[$key] = $value;
     }
-
 }
