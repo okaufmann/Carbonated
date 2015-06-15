@@ -179,6 +179,16 @@ trait Carbonated
     }
 
     /**
+     * Get all attributes that should be handled by carbonated.
+     *
+     * @return array
+     */
+    protected function getAllCarbonatedAttributes()
+    {
+        return array_merge($this->getCarbonatedTimestamps(), $this->getCarbonatedDates(), $this->getCarbonatedTimes());
+    }
+
+    /**
      * Get final timestamp string for displaying to end user.
      *
      * @param  string  $key
@@ -291,6 +301,25 @@ trait Carbonated
     public function freshTimestamp()
     {
         return Carbon::now($this->databaseTimezone());
+    }
+
+    /**
+     * Override default toArray() to include our own accessors.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $attributes = $this->attributesToArray();
+
+        // Use getAttributeValue()'s accessors on carbonated attributes.
+        foreach ($attributes as $key => $value) {
+            if (in_array($key, $this->getAllCarbonatedAttributes())) {
+                $attributes[$key] = $this->getAttributeValue($key);
+            }
+        }
+
+        return array_merge($attributes, $this->relationsToArray());
     }
 
     /**
