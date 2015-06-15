@@ -94,6 +94,12 @@ public function getRequiredByAttribute()
 }
 ```
 
+Finally, if you are passing a model instance to a 3rd party helper, it won't know about the mentioned `carbon` attribute for accessing raw carbon instances.  For these situations, you can use the `withCarbon()` object modifier.  This will override all accessors and return raw carbon instances by default.
+```php
+$serviceOrder->withCarbon() // Pass instance using withCarbon() modifier.
+$serviceOrder->required_by  // Outputs carbon instance.
+```
+
 # Timezone Conversion
 
 Carbonated supports automatic timezone conversion between your database and front end.  For example, maybe you are storing as `UTC` in your database, but want to display as `America/Toronto` in your front end.

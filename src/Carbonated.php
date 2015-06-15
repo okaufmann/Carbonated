@@ -14,6 +14,25 @@ trait Carbonated
     protected $carbonInstances;
 
     /**
+     * Indicates if accessors should be overridden to output raw carbon instances.
+     *
+     * @var boolean
+     */
+    protected $accessRawCarbonAttributes = false;
+
+    /**
+     * Object modifier overrides accessors to output raw carbon instances.
+     *
+     * @return $this
+     */
+    public function withCarbon()
+    {
+        $this->accessRawCarbonAttributes = true;
+
+        return $this;
+    }
+
+    /**
      * Get the intended timestamp format for displaying to end user.
      *
      * @return string
@@ -352,7 +371,12 @@ trait Carbonated
     {
         $value = $this->getAttributeFromArray($key);
 
-        // First we will check for the presence of a mutator in our model.
+        // If withCarbon() object modifier was used, return raw carbon instance.
+        if ($this->accessRawCarbonAttributes && in_array($key, $this->getAllCarbonatedAttributes())) {
+           return $this->carbon->$key ? $this->carbon->$key : null;
+        }
+
+        // Check for the presence of an accessor in our model.
         if ($this->hasGetMutator($key)) {
             return $this->mutateAttribute($key, $value);
         }
@@ -387,7 +411,7 @@ trait Carbonated
      */
     public function setAttribute($key, $value)
     {
-        // First we will check for the presence of a mutator in our model.
+        // Check for the presence of a mutator in our model.
         if ($this->hasSetMutator($key)) {
             $method = 'set'.studly_case($key).'Attribute';
 
