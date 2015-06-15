@@ -81,6 +81,11 @@ public $databaseDateFormat = 'Y-m-d';
 public $databaseTimeFormat = 'H:i:s';
 ```
 
+Disable the automatic accessors for JSON output by adding this property to your model.
+```php
+public $carbonatedJson = false;
+```
+
 You can also override the automatic accessors and mutators by providing your own [Accessor and Mutator](http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators) methods in your model.
 ```php
 public function getRequiredByAttribute()
