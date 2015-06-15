@@ -67,6 +67,16 @@ trait Carbonated
     }
 
     /**
+     * Check if JSON output should be carbonated.
+     *
+     * @return bool
+     */
+    protected function carbonatedJson()
+    {
+        return isset($this->carbonatedJson) && ! $this->carbonatedJson ? false : true;
+    }
+
+    /**
      * Get the intended database format for timestamp storage.
      *
      * @return string
@@ -308,18 +318,28 @@ trait Carbonated
      *
      * @return array
      */
-    public function toArray()
+    public function toArray($carbonatedAccessors = true)
     {
         $attributes = $this->attributesToArray();
 
         // Use getAttributeValue()'s accessors on carbonated attributes.
         foreach ($attributes as $key => $value) {
-            if (in_array($key, $this->getAllCarbonatedAttributes())) {
+            if ($carbonatedAccessors && in_array($key, $this->getAllCarbonatedAttributes())) {
                 $attributes[$key] = $this->getAttributeValue($key);
             }
         }
 
         return array_merge($attributes, $this->relationsToArray());
+    }
+
+    /**
+     * Override default jsonSerialize() to check if JSON output should be carbonated.
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return $this->carbonatedJson() ? $this->toArray() : $this->toArray(false);
     }
 
     /**
