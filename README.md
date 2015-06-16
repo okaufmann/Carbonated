@@ -94,10 +94,10 @@ public function getRequiredByAttribute()
 }
 ```
 
-If you are passing a model instance to a 3rd party helper, it won't know about the mentioned `carbon` attribute for accessing raw carbon instances.  For these situations, you can use the `withCarbon()` object modifier.  This will override all accessors and return raw carbon instances by default.
+If you are passing a model instance to a 3rd party helper, it won't know about the mentioned `carbon` attribute for accessing raw carbon instances.  For these situations, you can use the `withCarbon()` object modifier.  This will set a property on your object to override all accessors and return raw carbon instances by default.
 ```php
-$serviceOrder->withCarbon() // Pass instance using withCarbon() modifier.
-$serviceOrder->required_by  // Outputs carbon instance.
+$order = $orders->find($id)->withCarbon() // Use withCarbon() object modifier.
+$order->required_by                       // Outputs carbon instance.
 ```
 
 # Timezone Conversion
