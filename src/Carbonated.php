@@ -69,8 +69,13 @@ trait Carbonated
      */
     public function carbonatedTimezone()
     {
+        // Check for carbonatedTimezone() method in model.
+        if (method_exists($this->carbonatedTimezone())) {
+            return $this->carbonatedTimezone();
+        }
+
         // Check for $carbonatedTimezone property in model.
-        if (isset($this->carbonatedTimezone)) {
+        elseif (isset($this->carbonatedTimezone)) {
             return $this->carbonatedTimezone;
         }
 
@@ -86,13 +91,54 @@ trait Carbonated
     }
 
     /**
-     * Check if JSON output should be carbonated.
+     * Get the intended timestamp for json output.
      *
-     * @return bool
+     * @return string
      */
-    protected function carbonatedJson()
+    public function jsonTimestampFormat()
     {
-        return isset($this->carbonatedJson) && ! $this->carbonatedJson ? false : true;
+        return isset($this->jsonTimestampFormat) ? $this->jsonTimestampFormat : $this->databaseTimeFormat();
+    }
+
+    /**
+     * Get the intended date for json output.
+     *
+     * @return string
+     */
+    public function jsonDateFormat()
+    {
+        return isset($this->jsonDateFormat) ? $this->jsonDateFormat : $this->databaseDateFormat();
+    }
+
+    /**
+     * Get the intended time for json output.
+     *
+     * @return string
+     */
+    public function jsonTimeFormat()
+    {
+        return isset($this->jsonTimeFormat) ? $this->jsonTimeFormat : $this->databaseTimeFormat();
+    }
+
+    /**
+     * Get the intended timezone for json output.
+     *
+     * @return array
+     */
+    public function jsonTimezone()
+    {
+        // Check for jsonTimezone() method in model.
+        if (method_exists($this->jsonTimezone())) {
+            return $this->jsonTimezone();
+        }
+
+        // Check for $jsonTimezone property in model.
+        elseif (isset($this->jsonTimezone)) {
+            return $this->jsonTimezone;
+        }
+
+        // Otherwise use same timezone as database.
+        return $this->databaseTimezone();
     }
 
     /**
@@ -251,6 +297,39 @@ trait Carbonated
     }
 
     /**
+     * Get final timestamp string for json output.
+     *
+     * @param  string  $key
+     * @return string
+     */
+    protected function jsonTimestamp($key)
+    {
+        return $this->carbon->$key ? $this->carbon->$key->format($this->jsonTimestampFormat()) : null;
+    }
+
+    /**
+     * Get final date string for json output.
+     *
+     * @param  string  $key
+     * @return string
+     */
+    protected function jsonDate($key)
+    {
+        return $this->carbon->$key ? $this->carbon->$key->format($this->jsonDateFormat()) : null;
+    }
+
+    /**
+     * Get final time string for json output.
+     *
+     * @param  string  $key
+     * @return string
+     */
+    protected function jsonTime($key)
+    {
+        return $this->carbon->$key ? $this->carbon->$key->format($this->jsonTimeFormat()) : null;
+    }
+
+    /**
      * Mutate incoming timestamp for database storage.
      *
      * @param  mixed  $value
@@ -337,13 +416,13 @@ trait Carbonated
      *
      * @return array
      */
-    public function toArray($carbonatedAccessors = true)
+    public function toArray()
     {
         $attributes = $this->attributesToArray();
 
         // Use getAttributeValue()'s accessors on carbonated attributes.
         foreach ($attributes as $key => $value) {
-            if ($carbonatedAccessors && in_array($key, $this->getAllCarbonatedAttributes())) {
+            if (in_array($key, $this->getAllCarbonatedAttributes())) {
                 $attributes[$key] = $this->getAttributeValue($key);
             }
         }
@@ -352,13 +431,15 @@ trait Carbonated
     }
 
     /**
-     * Override default jsonSerialize() to check if JSON output should be carbonated.
+     * Override default jsonSerialize() to set $jsonSerialize property flag for accessors.
      *
      * @return array
      */
     public function jsonSerialize()
     {
-        return $this->carbonatedJson() ? $this->toArray() : $this->toArray(false);
+        $this->jsonSerialize = true;
+
+        return $this->toArray();
     }
 
     /**
@@ -383,11 +464,11 @@ trait Carbonated
 
         // If no accessor found, reference our own accessors for relevant date/time fields.
         if (in_array($key, $this->getCarbonatedTimestamps())) {
-            $value = $this->viewableTimestamp($key);
+            $value = isset($this->jsonSerialize) ? $this->jsonTimestamp($key) : $this->viewableTimestamp($key);
         } elseif (in_array($key, $this->getCarbonatedDates())) {
-            $value = $this->viewableDate($key);
+            $value = isset($this->jsonSerialize) ? $this->jsonDate($key) : $$this->viewableDate($key);
         } elseif (in_array($key, $this->getCarbonatedTimes())) {
-            $value = $this->viewableTime($key);
+            $value = isset($this->jsonSerialize) ? $this->jsonTime($key) : $$this->viewableTime($key);
         }
 
         // Otherwise, revert to default Eloquent behavour.
