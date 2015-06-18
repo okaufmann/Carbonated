@@ -90,21 +90,14 @@ trait Carbonated
      */
     public function carbonatedTimezone()
     {
-        // Check for getCarbonatedTimezone() method in model.
-        if (method_exists(get_class($this), 'getCarbonatedTimezone')) {
-            return $this->getCarbonatedTimezone();
-        }
-
         // Check for $carbonatedTimezone property in model.
-        elseif (isset($this->carbonatedTimezone)) {
+        if (isset($this->carbonatedTimezone)) {
             return $this->carbonatedTimezone;
         }
 
-        // If not, check for Auth::user() with a getTimezone() method.
-        elseif (class_exists(\Auth::class) && \Auth::check() && method_exists(config('auth.model'), 'getTimezone')) {
-            if (\Auth::user()->getTimezone()) {
-                return \Auth::user()->getTimezone();
-            }
+        // If not, check for an authenticated user with a $timezone property.
+        elseif (class_exists(\Auth::class) && \Auth::check() && \Auth::user()->timezone) {
+            return \Auth::user()->timezone;
         }
 
         // Otherwise use same timezone as database.
@@ -148,13 +141,8 @@ trait Carbonated
      */
     public function jsonTimezone()
     {
-        // Check for getJsonTimezone() method in model.
-        if (method_exists(get_class($this), 'getJsonTimezone')) {
-            return $this->getJsonTimezone();
-        }
-
         // Check for $jsonTimezone property in model.
-        elseif (isset($this->jsonTimezone)) {
+        if (isset($this->jsonTimezone)) {
             return $this->jsonTimezone;
         }
 
@@ -199,13 +187,8 @@ trait Carbonated
      */
     protected function databaseTimezone()
     {
-        // Check for getDatabaseTimezone() method in model.
-        if (method_exists(get_class($this), 'getDatabaseTimezone')) {
-            return $this->getdatabaseTimezone();
-        }
-
         // Check for $databaseTimezone property in model.
-        elseif (isset($this->getDatabaseTimezone)) {
+        if (isset($this->getDatabaseTimezone)) {
             return $this->databaseTimezone;
         }
 

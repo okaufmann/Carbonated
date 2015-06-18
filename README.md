@@ -90,9 +90,9 @@ public $databaseTimeFormat = 'H:i:s';
 
 You can also override all automatic accessors and mutators by providing your own [Accessor and Mutator](http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators) methods in your model.
 ```php
-public function getRequiredByAttribute()
+public function getRequiredByAttribute($value)
 {
-    return $this->withCarbon->required_by->format('M Y');
+    return $value; // Returns raw value from database.
 }
 ```
 
@@ -107,18 +107,19 @@ public $jsonTimezone = 'UTC';
 public $databaseTimezone = 'UTC';
 ```
 
-If the above properties are not explicitly set, you can dynamically set timezones by adding these methods to your model.
+If `$carbonatedTimezone` is not defined in your model, Carbonated will search for an authenticated user with a `$timezone` property.  This allows the user model be responsible for user specific timezones.
 ```php
-public function getCarbonatedTimezone() { return 'America/Toronto'; }
-public function getJsonTimezone() { return 'UTC'; }
-public function getDatabaseTimezone() { return 'UTC'; }
+public $timezone = 'America/Toronto;'
 ```
 
-If the `carbonatedTimezone` is not set using the above property or method, Carbonated will search the currently authenticated user object for a `getTimezone()` method.  This allows the user model be responsible for user specific timezones.
+The above properties can be set dynamically using [Accessors](http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators) instead of explicit properties.
 ```php
-public function getTimezone() { return 'America/Toronto'; }
+public function getTimezoneAttribute()
+{
+    return 'America/Toronto';
+}
 ```
 
-If either `carbonatedTimezone` or `jsonTimezone` are not set using the above properties or methods, `databaseTimezone` will be used as a fallback.
+If either `$carbonatedTimezone` or `$jsonTimezone` are undefined, `$databaseTimezone` will be used as a fallback.
 
-If `databaseTimezone` is not set timezone settings are not set using the above property or method, the app's timezone (found in `/config/app.php`) will be used as a fallback.
+If `$databaseTimezone` is undefined, the app's timezone (found in `/config/app.php`) will be used as a fallback.
