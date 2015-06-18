@@ -27,7 +27,7 @@ trait Carbonated
      */
     protected function carbonatedTimestamps()
     {
-        // Add default timestamp fields created by migrations schema builder.
+        // Add default fields for schema builder's timestamps() and softDeletes().
         $defaults = [static::CREATED_AT, static::UPDATED_AT, 'deleted_at'];
 
         return isset($this->carbonatedTimestamps) ? array_unique(array_merge($this->carbonatedTimestamps, $defaults)) : $defaults;
@@ -226,7 +226,8 @@ trait Carbonated
         // Create carbon instances.
         foreach ($fieldFormats as $field => $format) {
             $value = $this->getOriginal($field);
-            $carbonInstances[$field] = $value ? Carbon::createFromFormat($format, $value, $databaseTimezone)->timezone($carbonatedTimezone) : null;
+            $carbonInstance = $value ? Carbon::createFromFormat($format, $value, $databaseTimezone) : null;
+            $carbonInstances[$field] = $carbonInstance ? $carbonInstance->timezone($carbonatedTimezone) : null;
         }
 
         // And store carbon instances for future use.
