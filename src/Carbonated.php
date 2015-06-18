@@ -7,16 +7,16 @@ use Carbon\Carbon;
 trait Carbonated
 {
     /**
-     * Store carbon instances for use by carbon accessor.
+     * Store carbon instances for reuse.
      *
-     * @var \Carbon\Carbon
+     * @var object
      */
     protected $carbonInstances;
 
     /**
-     * Indicate whether accessor should return carbon.
+     * Indicate whether accessors should be overridden to return carbon instances.
      *
-     * @var boolean
+     * @var bool
      */
     protected $returnCarbon = false;
 
@@ -54,50 +54,50 @@ trait Carbonated
     }
 
     /**
-     * Get the intended timestamp format for displaying to end user.
+     * Get the intended timestamp format for view output.
      *
      * @return string
      */
     public function carbonatedTimestampFormat()
     {
-        return isset($this->carbonatedTimestampFormat) ? $this->carbonatedTimestampFormat : 'M d, Y g:ia';
+        return isset($this->carbonatedTimestampFormat) ? (string) $this->carbonatedTimestampFormat : 'M d, Y g:ia';
     }
 
     /**
-     * Get the intended date format for displaying to end user.
+     * Get the intended date format for view output.
      *
      * @return string
      */
     public function carbonatedDateFormat()
     {
-        return isset($this->carbonatedDateFormat) ? $this->carbonatedDateFormat : 'M d, Y';
+        return isset($this->carbonatedDateFormat) ? (string) $this->carbonatedDateFormat : 'M d, Y';
     }
 
     /**
-     * Get the intended date format for displaying to end user.
+     * Get the intended date format for view output.
      *
      * @return string
      */
     public function carbonatedTimeFormat()
     {
-        return isset($this->carbonatedTimeFormat) ? $this->carbonatedTimeFormat : 'g:ia';
+        return isset($this->carbonatedTimeFormat) ? (string) $this->carbonatedTimeFormat : 'g:ia';
     }
 
     /**
-     * Get the intended timezone for displaying to end user.
+     * Get the intended timezone for view output.
      *
-     * @return array
+     * @return string
      */
     public function carbonatedTimezone()
     {
         // Check for $carbonatedTimezone property in model.
         if (isset($this->carbonatedTimezone)) {
-            return $this->carbonatedTimezone;
+            return (string) $this->carbonatedTimezone;
         }
 
         // If not, check for an authenticated user with a $timezone property.
         elseif (class_exists(\Auth::class) && \Auth::check() && \Auth::user()->timezone) {
-            return \Auth::user()->timezone;
+            return (string) \Auth::user()->timezone;
         }
 
         // Otherwise use same timezone as database.
@@ -111,7 +111,7 @@ trait Carbonated
      */
     public function jsonTimestampFormat()
     {
-        return isset($this->jsonTimestampFormat) ? $this->jsonTimestampFormat : $this->databaseTimestampFormat();
+        return isset($this->jsonTimestampFormat) ? (string) $this->jsonTimestampFormat : $this->databaseTimestampFormat();
     }
 
     /**
@@ -121,7 +121,7 @@ trait Carbonated
      */
     public function jsonDateFormat()
     {
-        return isset($this->jsonDateFormat) ? $this->jsonDateFormat : $this->databaseDateFormat();
+        return isset($this->jsonDateFormat) ? (string) $this->jsonDateFormat : $this->databaseDateFormat();
     }
 
     /**
@@ -131,19 +131,19 @@ trait Carbonated
      */
     public function jsonTimeFormat()
     {
-        return isset($this->jsonTimeFormat) ? $this->jsonTimeFormat : $this->databaseTimeFormat();
+        return isset($this->jsonTimeFormat) ? (string) $this->jsonTimeFormat : $this->databaseTimeFormat();
     }
 
     /**
      * Get the intended timezone for json output.
      *
-     * @return array
+     * @return string
      */
     public function jsonTimezone()
     {
         // Check for $jsonTimezone property in model.
         if (isset($this->jsonTimezone)) {
-            return $this->jsonTimezone;
+            return (string) $this->jsonTimezone;
         }
 
         // Otherwise use same timezone as database.
@@ -157,7 +157,7 @@ trait Carbonated
      */
     protected function databaseTimestampFormat()
     {
-        return isset($this->databaseTimestampFormat) ? $this->databaseTimestampFormat : 'Y-m-d H:i:s';
+        return isset($this->databaseTimestampFormat) ? (string) $this->databaseTimestampFormat : 'Y-m-d H:i:s';
     }
 
     /**
@@ -167,7 +167,7 @@ trait Carbonated
      */
     protected function databaseDateFormat()
     {
-        return isset($this->databaseDateFormat) ? $this->databaseDateFormat : 'Y-m-d';
+        return isset($this->databaseDateFormat) ? (string) $this->databaseDateFormat : 'Y-m-d';
     }
 
     /**
@@ -177,7 +177,7 @@ trait Carbonated
      */
     protected function databaseTimeFormat()
     {
-        return isset($this->databaseTimeFormat) ? $this->databaseTimeFormat : 'H:i:s';
+        return isset($this->databaseTimeFormat) ? (string) $this->databaseTimeFormat : 'H:i:s';
     }
 
     /**
@@ -189,17 +189,17 @@ trait Carbonated
     {
         // Check for $databaseTimezone property in model.
         if (isset($this->getDatabaseTimezone)) {
-            return $this->databaseTimezone;
+            return (string) $this->databaseTimezone;
         }
 
         // Otherwise use app's timezone configuration.
-        return config('app.timezone');
+        return (string) config('app.timezone');
     }
 
     /**
-     * Return an object containing carbon instances of all specified date/time fields.
+     * Store and return carbon instances for reuse.
      *
-     * @return \Carbon\Carbon
+     * @return object
      */
     protected function carbonInstances()
     {
@@ -236,56 +236,71 @@ trait Carbonated
     }
 
     /**
-     * Return a clone of $this object with flag to modify accessors.
+     * Return a clone of $this object and modify it's accessors.
      *
      * @return $this
      */
     public function getWithCarbonAttribute()
     {
-        // Clone $this to preserve object state.
+        // Clone $this to preserve it's state.
         $clone = clone $this;
 
-        // Set flag for accessors to return carbon instances.
+        // Modify accessors.
         $clone->returnCarbon = true;
 
         return $clone;
     }
 
     /**
-     * Get final timestamp string for displaying to end user.
+     * Get timestamp string for view output.
      *
      * @param  string  $key
      * @return string
      */
     protected function viewableTimestamp($key)
     {
-        return $this->carbonInstances()->$key ? $this->carbonInstances()->$key->format($this->carbonatedTimestampFormat()) : null;
+        // Get necessary data for conversion.
+        $carbonatedFormat = $this->carbonatedTimestampFormat();
+        $carbonInstance = $this->carbonInstances()->$key;
+
+        // Return viewable output.
+        return $carbonInstance ? $carbonInstance->format($carbonatedFormat) : null;
     }
 
     /**
-     * Get final date string for displaying to end user.
+     * Get date string for view output.
      *
      * @param  string  $key
      * @return string
      */
     protected function viewableDate($key)
     {
-        return $this->carbonInstances()->$key ? $this->carbonInstances()->$key->format($this->carbonatedDateFormat()) : null;
+        // Get necessary data for conversion.
+        $carbonatedFormat = $this->carbonatedDateFormat();
+        $carbonInstance = $this->carbonInstances()->$key;
+
+        // Return viewable output.
+        return $carbonInstance ? $carbonInstance->format($carbonatedFormat) : null;
     }
 
     /**
-     * Get final time string for displaying to end user.
+     * Get time string for view output.
      *
      * @param  string  $key
      * @return string
      */
     protected function viewableTime($key)
     {
-        return $this->carbonInstances()->$key ? $this->carbonInstances()->$key->format($this->carbonatedTimeFormat()) : null;
+        // Get necessary data for conversion.
+        $carbonatedFormat = $this->carbonatedTimeFormat();
+        $carbonInstance = $this->carbonInstances()->$key;
+
+        // Return viewable output.
+        return $carbonInstance ? $carbonInstance->format($carbonatedFormat) : null;
     }
 
     /**
-     * Get final timestamp string for json output.
+     * Get timestamp string for json output.
      *
      * @param  string  $key
      * @return string
@@ -295,13 +310,14 @@ trait Carbonated
         // Get necessary data for conversion.
         $jsonFormat = $this->jsonTimestampFormat();
         $jsonTimezone = $this->jsonTimezone();
+        $carbonInstance = $this->carbonInstances()->$key;
 
         // Return JSON output.
-        return $this->carbonInstances()->$key ? $this->carbonInstances()->$key->timezone($jsonTimezone)->format($jsonFormat) : null;
+        return $carbonInstance ? $carbonInstance->timezone($jsonTimezone)->format($jsonFormat) : null;
     }
 
     /**
-     * Get final date string for json output.
+     * Get date string for json output.
      *
      * @param  string  $key
      * @return string
@@ -311,13 +327,14 @@ trait Carbonated
         // Get necessary data for conversion.
         $jsonFormat = $this->jsonDateFormat();
         $jsonTimezone = $this->jsonTimezone();
+        $carbonInstance = $this->carbonInstances()->$key;
 
         // Return JSON output.
-        return $this->carbonInstances()->$key ? $this->carbonInstances()->$key->timezone($jsonTimezone)->format($jsonFormat) : null;
+        return $carbonInstance ? $carbonInstance->timezone($jsonTimezone)->format($jsonFormat) : null;
     }
 
     /**
-     * Get final time string for json output.
+     * Get time string for json output.
      *
      * @param  string  $key
      * @return string
@@ -327,9 +344,10 @@ trait Carbonated
         // Get necessary data for conversion.
         $jsonFormat = $this->jsonTimeFormat();
         $jsonTimezone = $this->jsonTimezone();
+        $carbonInstance = $this->carbonInstances()->$key;
 
         // Return JSON output.
-        return $this->carbonInstances()->$key ? $this->carbonInstances()->$key->timezone($jsonTimezone)->format($jsonFormat) : null;
+        return $carbonInstance ? $carbonInstance->timezone($jsonTimezone)->format($jsonFormat) : null;
     }
 
     /**
@@ -341,7 +359,7 @@ trait Carbonated
     protected function storableTimestamp($value)
     {
         // If Eloquent returns value via freshTimestamp(), it will already be a carbon object.
-        if (is_object($value)) {
+        if ($value instanceof Carbon) {
             $databaseFormat = $this->databaseTimestampFormat();
 
             // All we need to do is convert to storable value.
@@ -353,9 +371,10 @@ trait Carbonated
         $databaseFormat = $this->databaseTimestampFormat();
         $carbonatedTimezone = $this->carbonatedTimezone();
         $databaseTimezone = $this->databaseTimezone();
+        $carbonInstance = $value ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone) : null;
 
         // Return storable value.
-        return $value ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone)->timezone($databaseTimezone)->format($databaseFormat) : null;
+        return $carbonInstance ? $carbonInstance->timezone($databaseTimezone)->format($databaseFormat) : null;
     }
 
     /**
@@ -371,9 +390,10 @@ trait Carbonated
         $databaseFormat = $this->databaseDateFormat();
         $carbonatedTimezone = $this->carbonatedTimezone();
         $databaseTimezone = $this->databaseTimezone();
+        $carbonInstance = $value ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone) : null;
 
         // Return storable value.
-        return $value ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone)->timezone($databaseTimezone)->format($databaseFormat) : null;
+        return $carbonInstance ? $carbonInstance->timezone($databaseTimezone)->format($databaseFormat) : null;
     }
 
     /**
@@ -389,9 +409,10 @@ trait Carbonated
         $databaseFormat = $this->databaseTimeFormat();
         $carbonatedTimezone = $this->carbonatedTimezone();
         $databaseTimezone = $this->databaseTimezone();
+        $carbonInstance = $value ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone) : null;
 
         // Return storable value.
-        return $value ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone)->timezone($databaseTimezone)->format($databaseFormat) : null;
+        return $carbonInstance ? $carbonInstance->timezone($databaseTimezone)->format($databaseFormat) : null;
     }
 
     /**
@@ -411,12 +432,15 @@ trait Carbonated
      */
     public function freshTimestamp()
     {
-        return Carbon::now($this->databaseTimezone());
+        $databaseTimezone = $this->databaseTimezone();
+
+        return Carbon::now($databaseTimezone);
     }
 
     /**
      * Override default toArray() to include our own accessors.
      *
+     * @param  bool  $useJsonAccessors
      * @return array
      */
     public function toArray($useJsonAccessors = false)
@@ -440,7 +464,7 @@ trait Carbonated
     }
 
     /**
-     * Override default jsonSerialize() to set $jsonSerialize property flag for accessors.
+     * Override default jsonSerialize() to set $useJsonAccessors parameter.
      *
      * @return array
      */
