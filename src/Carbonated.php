@@ -26,7 +26,7 @@ trait Carbonated
      *
      * @return array
      */
-    protected function carbonatedTimestamps()
+    public function carbonatedTimestamps()
     {
         // Add default fields for schema builder's timestamps() and softDeletes().
         $defaults = [static::CREATED_AT, static::UPDATED_AT, 'deleted_at'];
@@ -39,7 +39,7 @@ trait Carbonated
      *
      * @return array
      */
-    protected function carbonatedDates()
+    public function carbonatedDates()
     {
         return isset($this->carbonatedDates) ? (array) $this->carbonatedDates : [];
     }
@@ -49,7 +49,7 @@ trait Carbonated
      *
      * @return array
      */
-    protected function carbonatedTimes()
+    public function carbonatedTimes()
     {
         return isset($this->carbonatedTimes) ? (array) $this->carbonatedTimes : [];
     }
@@ -156,7 +156,7 @@ trait Carbonated
      *
      * @return string
      */
-    protected function databaseTimestampFormat()
+    public function databaseTimestampFormat()
     {
         return isset($this->databaseTimestampFormat) ? (string) $this->databaseTimestampFormat : 'Y-m-d H:i:s';
     }
@@ -166,7 +166,7 @@ trait Carbonated
      *
      * @return string
      */
-    protected function databaseDateFormat()
+    public function databaseDateFormat()
     {
         return isset($this->databaseDateFormat) ? (string) $this->databaseDateFormat : 'Y-m-d';
     }
@@ -176,7 +176,7 @@ trait Carbonated
      *
      * @return string
      */
-    protected function databaseTimeFormat()
+    public function databaseTimeFormat()
     {
         return isset($this->databaseTimeFormat) ? (string) $this->databaseTimeFormat : 'H:i:s';
     }
@@ -186,7 +186,7 @@ trait Carbonated
      *
      * @return string
      */
-    protected function databaseTimezone()
+    public function databaseTimezone()
     {
         // Check for $databaseTimezone property in model.
         if (isset($this->getDatabaseTimezone)) {
@@ -429,7 +429,7 @@ trait Carbonated
      *
      * @return bool
      */
-    protected static function requestIsJson()
+    public static function requestIsJson()
     {
         return str_contains(Request::header('CONTENT_TYPE'), 'json');
     }
