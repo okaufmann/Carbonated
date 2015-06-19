@@ -3,6 +3,7 @@
 namespace JerseyMilker;
 
 use Carbon\Carbon;
+use Request;
 
 trait Carbonated
 {
@@ -362,17 +363,20 @@ trait Carbonated
         // If Eloquent returns value via freshTimestamp(), it will already be a carbon object.
         if ($value instanceof Carbon) {
             $databaseFormat = $this->databaseTimestampFormat();
+            $databaseTimezone = $this->databaseTimezone();
 
             // All we need to do is convert to storable value.
-            return $value->format($databaseFormat);
+            return $value->timezone($databaseTimezone)->format($databaseFormat);
         }
 
         // Otherwise get necessary data for conversion.
-        $carbonatedFormat = $this->carbonatedTimestampFormat();
+        $inputFormat = static::requestIsJson() ? $this->jsonTimestampFormat() : $this->carbonatedTimestampFormat();
+        $inputTimezone = static::requestIsJson() ? $this->jsonTimezone() : $this->carbonatedTimezone();
         $databaseFormat = $this->databaseTimestampFormat();
-        $carbonatedTimezone = $this->carbonatedTimezone();
         $databaseTimezone = $this->databaseTimezone();
-        $carbonInstance = $value ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone) : null;
+
+        // Create carbon instance.
+        $carbonInstance = $value ? Carbon::createFromFormat($inputFormat, $value, $inputTimezone) : null;
 
         // Return storable value.
         return $carbonInstance ? $carbonInstance->timezone($databaseTimezone)->format($databaseFormat) : null;
@@ -387,11 +391,13 @@ trait Carbonated
     protected function storableDate($value)
     {
         // Get necessary data for conversion.
-        $carbonatedFormat = $this->carbonatedDateFormat();
+        $inputFormat = static::requestIsJson() ? $this->jsonDateFormat() : $this->carbonatedDateFormat();
+        $inputTimezone = static::requestIsJson() ? $this->jsonTimezone() : $this->carbonatedTimezone();
         $databaseFormat = $this->databaseDateFormat();
-        $carbonatedTimezone = $this->carbonatedTimezone();
         $databaseTimezone = $this->databaseTimezone();
-        $carbonInstance = $value ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone) : null;
+
+        // Create carbon instance.
+        $carbonInstance = $value ? Carbon::createFromFormat($inputFormat, $value, $inputTimezone) : null;
 
         // Return storable value.
         return $carbonInstance ? $carbonInstance->timezone($databaseTimezone)->format($databaseFormat) : null;
@@ -406,14 +412,26 @@ trait Carbonated
     protected function storableTime($value)
     {
         // Get necessary data for conversion.
-        $carbonatedFormat = $this->carbonatedTimeFormat();
+        $inputFormat = static::requestIsJson() ? $this->jsonTimeFormat() : $this->carbonatedTimeFormat();
+        $inputTimezone = static::requestIsJson() ? $this->jsonTimezone() : $this->carbonatedTimezone();
         $databaseFormat = $this->databaseTimeFormat();
-        $carbonatedTimezone = $this->carbonatedTimezone();
         $databaseTimezone = $this->databaseTimezone();
-        $carbonInstance = $value ? Carbon::createFromFormat($carbonatedFormat, $value, $carbonatedTimezone) : null;
+
+        // Create carbon instance.
+        $carbonInstance = $value ? Carbon::createFromFormat($inputFormat, $value, $inputTimezone) : null;
 
         // Return storable value.
         return $carbonInstance ? $carbonInstance->timezone($databaseTimezone)->format($databaseFormat) : null;
+    }
+
+    /**
+     * Check if request is JSON (more accurate than Request::isJson() helper).
+     *
+     * @return bool
+     */
+    protected static function requestIsJson()
+    {
+        return str_contains(Request::header('CONTENT_TYPE'), 'json');
     }
 
     /**
