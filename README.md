@@ -123,3 +123,5 @@ public function getTimezoneAttribute()
 If either `$carbonatedTimezone` or `$jsonTimezone` are undefined, `$databaseTimezone` will be used as a fallback.
 
 If `$databaseTimezone` is undefined, the app's timezone (found in `/config/app.php`) will be used as a fallback.
+
+If you are using Carbonated outside of Laravel, `$databaseTimezone` will default to `UTC`.

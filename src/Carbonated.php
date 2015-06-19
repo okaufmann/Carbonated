@@ -194,7 +194,7 @@ trait Carbonated
         }
 
         // Otherwise use app's timezone configuration.
-        return (string) config('app.timezone');
+        return (string) function_exists('config') ? config('app.timezone') : 'UTC';
     }
 
     /**
