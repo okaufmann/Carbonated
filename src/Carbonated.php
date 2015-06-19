@@ -425,7 +425,7 @@ trait Carbonated
     }
 
     /**
-     * Check if request is JSON (more accurate than Request::isJson() helper).
+     * Check if request is some type of JSON (purposefully more lenient than current Request::isJson() helper).
      *
      * @return bool
      */
