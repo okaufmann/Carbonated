@@ -55,6 +55,35 @@ trait Carbonated
     }
 
     /**
+     * Get all attributes that should be handled by carbonated.
+     *
+     * @return array
+     */
+    public function carbonatedAttributes()
+    {
+        return array_merge($this->carbonatedTimestamps(), $this->carbonatedDates(), $this->carbonatedTimes());
+    }
+
+    /**
+     * Get carbonated attribute type.
+     *
+     * @param  string  $key
+     * @return string
+     */
+    public function carbonatedAttributeType($key)
+    {
+        if (in_array($key, $this->carbonatedTimestamps())) {
+            return 'timestamp';
+        } elseif (in_array($key, $this->carbonatedDates())) {
+            return 'date';
+        } elseif (in_array($key, $this->carbonatedTimes())) {
+            return 'time';
+        }
+
+        return false;
+    }
+
+    /**
      * Get the intended timestamp format for view output.
      *
      * @return string
@@ -224,16 +253,17 @@ trait Carbonated
             $fieldFormats[$field] = $this->databaseTimeFormat();
         }
 
-        // Create carbon instances.
+        // Create Carbon instances.
         foreach ($fieldFormats as $field => $format) {
             $value = $this->getOriginal($field);
             $carbonInstance = $value ? Carbon::createFromFormat($format, $value, $databaseTimezone) : null;
             $carbonInstances[$field] = $carbonInstance ? $carbonInstance->timezone($carbonatedTimezone) : null;
         }
 
-        // And store carbon instances for future use.
+        // Store Carbon instances for future use.
         $this->carbonInstances = isset($carbonInstances) ? (object) $carbonInstances : null;
 
+        // Return Carbon instances.
         return $this->carbonInstances;
     }
 
@@ -247,125 +277,51 @@ trait Carbonated
         // Clone $this to preserve it's state.
         $clone = clone $this;
 
-        // Modify accessors.
+        // Modify clone's accessors.
         $clone->returnCarbon = true;
 
+        // Return clone.
         return $clone;
     }
 
     /**
-     * Get timestamp string for view output.
+     * Access and format for front end.
      *
      * @param  string  $key
+     * @param  bool    $json
      * @return string
      */
-    protected function viewableTimestamp($key)
+    protected function carbonatedAccessor($key, $json = false)
     {
-        // Get necessary data for conversion.
-        $carbonatedFormat = $this->carbonatedTimestampFormat();
+        // Initial accesor setup.
+        $accessorType = $json ? 'json' : 'carbonated';
+        $fieldType = $this->carbonatedAttributeType($key);
+
+        // Get output format and timezone for conversion.
+        $outputFormat = $this->{$accessorType . ucfirst($fieldType) . 'Format'}();
+        $outputTimezone = $this->{$accessorType . 'Timezone'}();
+
+        // Get Carbon instance.
         $carbonInstance = $this->carbonInstances()->$key;
 
-        // Return viewable output.
-        return $carbonInstance ? $carbonInstance->format($carbonatedFormat) : null;
+        // Return formatted value.
+        return $carbonInstance ? $carbonInstance->timezone($outputTimezone)->format($outputFormat) : null;
     }
 
     /**
-     * Get date string for view output.
+     * Mutate to a storable value for database.
      *
      * @param  string  $key
-     * @return string
-     */
-    protected function viewableDate($key)
-    {
-        // Get necessary data for conversion.
-        $carbonatedFormat = $this->carbonatedDateFormat();
-        $carbonInstance = $this->carbonInstances()->$key;
-
-        // Return viewable output.
-        return $carbonInstance ? $carbonInstance->format($carbonatedFormat) : null;
-    }
-
-    /**
-     * Get time string for view output.
-     *
-     * @param  string  $key
-     * @return string
-     */
-    protected function viewableTime($key)
-    {
-        // Get necessary data for conversion.
-        $carbonatedFormat = $this->carbonatedTimeFormat();
-        $carbonInstance = $this->carbonInstances()->$key;
-
-        // Return viewable output.
-        return $carbonInstance ? $carbonInstance->format($carbonatedFormat) : null;
-    }
-
-    /**
-     * Get timestamp string for json output.
-     *
-     * @param  string  $key
-     * @return string
-     */
-    protected function jsonTimestamp($key)
-    {
-        // Get necessary data for conversion.
-        $jsonFormat = $this->jsonTimestampFormat();
-        $jsonTimezone = $this->jsonTimezone();
-        $carbonInstance = $this->carbonInstances()->$key;
-
-        // Return JSON output.
-        return $carbonInstance ? $carbonInstance->timezone($jsonTimezone)->format($jsonFormat) : null;
-    }
-
-    /**
-     * Get date string for json output.
-     *
-     * @param  string  $key
-     * @return string
-     */
-    protected function jsonDate($key)
-    {
-        // Get necessary data for conversion.
-        $jsonFormat = $this->jsonDateFormat();
-        $jsonTimezone = $this->jsonTimezone();
-        $carbonInstance = $this->carbonInstances()->$key;
-
-        // Return JSON output.
-        return $carbonInstance ? $carbonInstance->timezone($jsonTimezone)->format($jsonFormat) : null;
-    }
-
-    /**
-     * Get time string for json output.
-     *
-     * @param  string  $key
-     * @return string
-     */
-    protected function jsonTime($key)
-    {
-        // Get necessary data for conversion.
-        $jsonFormat = $this->jsonTimeFormat();
-        $jsonTimezone = $this->jsonTimezone();
-        $carbonInstance = $this->carbonInstances()->$key;
-
-        // Return JSON output.
-        return $carbonInstance ? $carbonInstance->timezone($jsonTimezone)->format($jsonFormat) : null;
-    }
-
-    /**
-     * Convert to a storable value for database.
-     *
      * @param  mixed   $value
-     * @param  string  $type
      * @return string
      */
-    protected function storableValue($value, $type)
+    protected function carbonatedMutator($key, $value)
     {
-        // Get database configuration.
+        // Get database format and timezone.
         $databaseFormat = $this->databaseTimestampFormat();
         $databaseTimezone = $this->databaseTimezone();
 
-        // If value is DateTime instance, convert to Carbon.
+        // If value is DateTime instance, convert to Carbon instance.
         if ($value instanceof \DateTime) {
             $value = Carbon::instance($value);
         }
@@ -375,50 +331,23 @@ trait Carbonated
             return $value->timezone($databaseTimezone)->format($databaseFormat);
         }
 
-        // Otherwise, get rest of what is needed for conversion.
-        $jsonFormat = $this->{'json' . ucfirst($type) . 'Format'}();
-        $carbonatedFormat = $this->{'carbonated' . ucfirst($type) . 'Format'}();
-        $inputFormat = static::requestIsJson() ? $jsonFormat : $carbonatedFormat;
-        $inputTimezone = static::requestIsJson() ? $this->jsonTimezone() : $this->carbonatedTimezone();
+        // Otherwise, setup for mutator.
+        $fieldType = $this->carbonatedAttributeType($key);
 
-        // Convert to Carbon.
+        // Get input format and timezone for conversion.
+        if (static::requestIsJson()) {
+            $inputFormat = $this->{'json' . ucfirst($fieldType) . 'Format'}();
+            $inputTimezone = $this->jsonTimezone();
+        } else {
+            $inputFormat = $this->{'carbonated' . ucfirst($fieldType) . 'Format'}();
+            $inputTimezone = $this->carbonatedTimezone();
+        }
+
+        // Convert to Carbon instance.
         $carbonInstance = $value ? Carbon::createFromFormat($inputFormat, $value, $inputTimezone) : null;
 
-        // And return storable value.
+        // Return storable value.
         return $carbonInstance ? $carbonInstance->timezone($databaseTimezone)->format($databaseFormat) : null;
-    }
-
-    /**
-     * Mutate incoming timestamp for database storage.
-     *
-     * @param  mixed  $value
-     * @return string
-     */
-    protected function storableTimestamp($value)
-    {
-        return $this->storableValue($value, 'timestamp');
-    }
-
-    /**
-     * Mutate incoming date for database storage.
-     *
-     * @param  string  $value
-     * @return string
-     */
-    protected function storableDate($value)
-    {
-        return $this->storableValue($value, 'date');
-    }
-
-    /**
-     * Mutate incoming time for database storage.
-     *
-     * @param  string  $value
-     * @return string
-     */
-    protected function storableTime($value)
-    {
-        return $this->storableValue($value, 'time');
     }
 
     /**
@@ -466,12 +395,8 @@ trait Carbonated
         // If returning JSON output, reference our own accessors for relevant date/time fields.
         if ($useJsonAccessors) {
             foreach ($attributes as $key => $value) {
-                if (! $this->hasGetMutator($key) && in_array($key, $this->carbonatedTimestamps())) {
-                    $attributes[$key] = $this->jsonTimestamp($key);
-                } elseif (! $this->hasGetMutator($key) && in_array($key, $this->carbonatedDates())) {
-                    $attributes[$key] = $this->jsonDate($key);
-                } elseif (! $this->hasGetMutator($key) && in_array($key, $this->carbonatedTimes())) {
-                    $attributes[$key] = $this->jsonTime($key);
+                if (! $this->hasGetMutator($key) && in_array($key, $this->carbonatedAttributes())) {
+                    $attributes[$key] = $this->carbonatedAccessor($key, true);
                 }
             }
         }
@@ -505,12 +430,8 @@ trait Carbonated
         }
 
         // If no accessor found, reference our own accessors for relevant date/time fields.
-        if (in_array($key, $this->carbonatedTimestamps())) {
-            $value = $this->returnCarbon ? $this->carbonInstances()->$key : $this->viewableTimestamp($key);
-        } elseif (in_array($key, $this->carbonatedDates())) {
-            $value = $this->returnCarbon ? $this->carbonInstances()->$key : $this->viewableDate($key);
-        } elseif (in_array($key, $this->carbonatedTimes())) {
-            $value = $this->returnCarbon ? $this->carbonInstances()->$key : $this->viewableTime($key);
+        if (in_array($key, $this->carbonatedAttributes())) {
+            $value = $this->returnCarbon ? $this->carbonInstances()->$key : $this->carbonatedAccessor($key);
         }
 
         // Otherwise, revert to default Eloquent behavour.
@@ -542,12 +463,8 @@ trait Carbonated
         }
 
         // If no mutator found, reference our own mutators for relevant date/time fields.
-        elseif (in_array($key, $this->carbonatedTimestamps())) {
-            $value = $this->storableTimestamp($value);
-        } elseif (in_array($key, $this->carbonatedDates())) {
-            $value = $this->storableDate($value);
-        } elseif (in_array($key, $this->carbonatedTimes())) {
-            $value = $this->storableTime($value);
+        elseif (in_array($key, $this->carbonatedAttributes())) {
+            $value = $this->carbonatedMutator($key, $value);
         }
 
         // Otherwise, revert to default Eloquent behavour.
