@@ -21,5 +21,10 @@
             "JerseyMilker\\": "src/"
         }
     },
+    "autoload-dev": {
+        "classmap": [
+            "tests/"
+        ]
+    },
     "minimum-stability": "dev"
 }
