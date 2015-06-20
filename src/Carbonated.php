@@ -189,7 +189,7 @@ trait Carbonated
     public function databaseTimezone()
     {
         // Check for $databaseTimezone property in model.
-        if (isset($this->getDatabaseTimezone)) {
+        if (isset($this->databaseTimezone)) {
             return (string) $this->databaseTimezone;
         }
 
