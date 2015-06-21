@@ -101,7 +101,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $actual = $this->model->carbonatedTimezone();
         $this->assertEquals($expected, $actual);
 
-        // !TODO: Test Auth::user() $timezone attribute?
+        // !TODO: Test Auth::user() $timezone attribute with functional test.
 
         // Set by user.
         $expected = 'Murica/South';
@@ -216,7 +216,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $actual = $this->model->databaseTimezone();
         $this->assertEquals($expected, $actual);
 
-        // !TODO: Test Laravel app config() helper?
+        // !TODO: Test Laravel app config() helper with functional test.
 
         // Set by user.
         $expected = 'Murica/South';
