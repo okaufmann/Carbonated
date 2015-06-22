@@ -28,8 +28,9 @@ Eloquent provides DateTime handling through [Date Mutators](http://laravel.com/d
 
 Via [Composer](https://getcomposer.org):
 ```
-composer require 'jerseymilker/carbonated:dev-master'
+composer require 'thisvessel/carbonated:dev-master'
 ```
+Note: I will tag version as soon I've added sufficient test coverage.
 
 # Basic Usage
 
