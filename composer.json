@@ -1,10 +1,10 @@
 {
-    "name": "jerseymilker/carbonated",
+    "name": "thisvessel/carbonated",
     "description": "An Eloquent model trait that offers more flexible timestamp/date/time handling.",
     "authors": [
         {
             "name": "Jesse Leite",
-            "email": "jesseleite@gmail.com"
+            "email": "jesse@thisvessel.co"
         }
     ],
     "license": "MIT",
