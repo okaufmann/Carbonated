@@ -10,12 +10,9 @@ class FunctionalTest extends PHPUnit_Framework_TestCase
 {
     use ReflectableTrait;
 
-    public $model;
-    public $modelReflection;
-    public $carbon;
-
     public $capsule;
     public $connection;
+    public $carbon;
 
     public function setUp()
     {
@@ -35,11 +32,7 @@ class FunctionalTest extends PHPUnit_Framework_TestCase
         $this->connection = $this->capsule->getConnection('default');
 
         // Setup ExampleModel.
-        $this->model = new ExampleModel;
-
-        // Setup ExampleModel reflection.
-        $this->reflect($this->model);
-        $this->modelReflection = $this->on($this->model);
+        $this->reflect(new ExampleModel);
 
         // Setup Carbon instance.
         $this->carbon = Carbon::now();

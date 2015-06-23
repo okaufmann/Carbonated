@@ -1,26 +1,28 @@
 <?php
 
+use SKAgarwal\Reflection\ReflectableTrait;
+
 class ConfigurationTest extends PHPUnit_Framework_TestCase
 {
-    public $model;
+    use ReflectableTrait;
 
     public function setUp()
     {
         // Setup ExampleModel.
-        $this->model = new ExampleModel;
+        $this->reflect(new ExampleModel);
     }
 
     public function testCarbonatedTimestamps()
     {
         // Default.
         $expected = ['created_at', 'updated_at', 'deleted_at'];
-        $actual = $this->model->carbonatedTimestamps();
+        $actual = $this->callCarbonatedTimestamps();
         $this->assertEquals($expected, $actual);
 
         // Set by user.
         $expected = ['completed_at', 'created_at', 'updated_at', 'deleted_at'];
-        $this->model->carbonatedTimestamps = ['completed_at'];
-        $actual = $this->model->carbonatedTimestamps();
+        $this->setCarbonatedTimestamps = ['completed_at'];
+        $actual = $this->callCarbonatedTimestamps();
         $this->assertEquals($expected, $actual);
     }
 
@@ -28,13 +30,13 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         // Default.
         $expected = [];
-        $actual = $this->model->carbonatedDates();
+        $actual = $this->callCarbonatedDates();
         $this->assertEquals($expected, $actual);
 
         // Set by user.
         $expected = ['required_by'];
-        $this->model->carbonatedDates = ['required_by'];
-        $actual = $this->model->carbonatedDates();
+        $this->setCarbonatedDates = ['required_by'];
+        $actual = $this->callCarbonatedDates();
         $this->assertEquals($expected, $actual);
     }
 
@@ -42,13 +44,13 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         // Default.
         $expected = [];
-        $actual = $this->model->carbonatedTimes();
+        $actual = $this->callCarbonatedTimes();
         $this->assertEquals($expected, $actual);
 
         // Set by user.
         $expected = ['pickup_time'];
-        $this->model->carbonatedTimes = ['pickup_time'];
-        $actual = $this->model->carbonatedTimes();
+        $this->setCarbonatedTimes = ['pickup_time'];
+        $actual = $this->callCarbonatedTimes();
         $this->assertEquals($expected, $actual);
     }
 
@@ -56,13 +58,13 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         // Default.
         $expected = 'M d, Y g:ia';
-        $actual = $this->model->carbonatedTimestampFormat();
+        $actual = $this->callCarbonatedTimestampFormat();
         $this->assertEquals($expected, $actual);
 
         // Set by user.
         $expected = 'M M d d Y Y g g i i a a';
-        $this->model->carbonatedTimestampFormat = $expected;
-        $actual = $this->model->carbonatedTimestampFormat();
+        $this->setCarbonatedTimestampFormat = $expected;
+        $actual = $this->callCarbonatedTimestampFormat();
         $this->assertEquals($expected, $actual);
     }
 
@@ -70,13 +72,13 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         // Default.
         $expected = 'M d, Y';
-        $actual = $this->model->carbonatedDateFormat();
+        $actual = $this->callCarbonatedDateFormat();
         $this->assertEquals($expected, $actual);
 
         // Set by user.
         $expected = 'M M d d Y Y';
-        $this->model->carbonatedDateFormat = $expected;
-        $actual = $this->model->carbonatedDateFormat();
+        $this->setCarbonatedDateFormat = $expected;
+        $actual = $this->callCarbonatedDateFormat();
         $this->assertEquals($expected, $actual);
     }
 
@@ -84,100 +86,99 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         // Default.
         $expected = 'g:ia';
-        $actual = $this->model->carbonatedTimeFormat();
+        $actual = $this->callCarbonatedTimeFormat();
         $this->assertEquals($expected, $actual);
 
         // Set by user.
         $expected = 'g g i i a a';
-        $this->model->carbonatedTimeFormat = $expected;
-        $actual = $this->model->carbonatedTimeFormat();
+        $this->setCarbonatedTimeFormat = $expected;
+        $actual = $this->callCarbonatedTimeFormat();
         $this->assertEquals($expected, $actual);
     }
 
     public function testCarbonatedTimezone()
     {
         // Default.
-        $expected = $this->model->databaseTimezone();
-        $actual = $this->model->carbonatedTimezone();
+        $expected = $this->callDatabaseTimezone();
+        $actual = $this->callCarbonatedTimezone();
         $this->assertEquals($expected, $actual);
 
         // !TODO: Test Auth::user() $timezone attribute with functional test.
 
         // Set by user.
         $expected = 'Murica/South';
-        $this->model->carbonatedTimezone = $expected;
-        $actual = $this->model->carbonatedTimezone();
+        $this->setCarbonatedTimezone = $expected;
+        $actual = $this->callCarbonatedTimezone();
         $this->assertEquals($expected, $actual);
     }
 
     public function testJsonTimestampFormat()
     {
         // Default.
-        $expected = $this->model->databaseTimestampFormat();
-        $actual = $this->model->jsonTimestampFormat();
+        $expected = $this->callDatabaseTimestampFormat();
+        $actual = $this->callJsonTimestampFormat();
         $this->assertEquals($expected, $actual);
 
         // Set by user.
         $expected = 'M M d d Y Y g g i i a a';
-        $this->model->jsonTimestampFormat = $expected;
-        $actual = $this->model->jsonTimestampFormat();
+        $this->setJsonTimestampFormat = $expected;
+        $actual = $this->callJsonTimestampFormat();
         $this->assertEquals($expected, $actual);
     }
 
     public function testJsonDateFormat()
     {
         // Default.
-        $expected = $this->model->databaseDateFormat();
-        $actual = $this->model->jsonDateFormat();
+        $expected = $this->callDatabaseDateFormat();
+        $actual = $this->callJsonDateFormat();
         $this->assertEquals($expected, $actual);
 
         // Set by user.
         $expected = 'M M d d Y Y';
-        $this->model->jsonDateFormat = $expected;
-        $actual = $this->model->jsonDateFormat();
+        $this->setJsonDateFormat = $expected;
+        $actual = $this->callJsonDateFormat();
         $this->assertEquals($expected, $actual);
     }
 
     public function testJsonTimeFormat()
     {
         // Default.
-        $expected = $this->model->databaseTimeFormat();
-        $actual = $this->model->jsonTimeFormat();
+        $expected = $this->callDatabaseTimeFormat();
+        $actual = $this->callJsonTimeFormat();
         $this->assertEquals($expected, $actual);
 
         // Set by user.
         $expected = 'g g i i a a';
-        $this->model->jsonTimeFormat = $expected;
-        $actual = $this->model->jsonTimeFormat();
+        $this->setJsonTimeFormat = $expected;
+        $actual = $this->callJsonTimeFormat();
         $this->assertEquals($expected, $actual);
     }
 
     public function testJsonTimezone()
     {
         // Default.
-        $expected = $this->model->databaseTimezone();
-        $actual = $this->model->jsonTimezone();
+        $expected = $this->callDatabaseTimezone();
+        $actual = $this->callJsonTimezone();
         $this->assertEquals($expected, $actual);
 
         // Set by user.
         $expected = 'Murica/South';
-        $this->model->jsonTimezone = $expected;
-        $actual = $this->model->jsonTimezone();
+        $this->setJsonTimezone = $expected;
+        $actual = $this->callJsonTimezone();
         $this->assertEquals($expected, $actual);
     }
-
 
     public function testDatabaseTimestampFormat()
     {
         // Default.
         $expected = 'Y-m-d H:i:s';
-        $actual = $this->model->databaseTimestampFormat();
+        $actual = $this->callDatabaseTimestampFormat();
         $this->assertEquals($expected, $actual);
 
         // Set by user.
         $expected = 'M M d d Y Y g g i i a a';
-        $this->model->databaseTimestampFormat = $expected;
-        $actual = $this->model->databaseTimestampFormat();
+        $this->setDatabaseTimestampFormat = $expected;
+        $actual = $this->callDatabaseTimestampFormat();
         $this->assertEquals($expected, $actual);
     }
 
@@ -185,13 +186,13 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         // Default.
         $expected = 'Y-m-d';
-        $actual = $this->model->databaseDateFormat();
+        $actual = $this->callDatabaseDateFormat();
         $this->assertEquals($expected, $actual);
 
         // Set by user.
         $expected = 'M M d d Y Y';
-        $this->model->databaseDateFormat = $expected;
-        $actual = $this->model->databaseDateFormat();
+        $this->setDatabaseDateFormat = $expected;
+        $actual = $this->callDatabaseDateFormat();
         $this->assertEquals($expected, $actual);
     }
 
@@ -199,13 +200,13 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         // Default.
         $expected = 'H:i:s';
-        $actual = $this->model->databaseTimeFormat();
+        $actual = $this->callDatabaseTimeFormat();
         $this->assertEquals($expected, $actual);
 
         // Set by user.
         $expected = 'g g i i a a';
-        $this->model->databaseTimeFormat = $expected;
-        $actual = $this->model->databaseTimeFormat();
+        $this->setDatabaseTimeFormat = $expected;
+        $actual = $this->callDatabaseTimeFormat();
         $this->assertEquals($expected, $actual);
     }
 
@@ -213,16 +214,15 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         // Default.
         $expected = 'UTC';
-        $actual = $this->model->databaseTimezone();
+        $actual = $this->callDatabaseTimezone();
         $this->assertEquals($expected, $actual);
 
         // !TODO: Test Laravel app config() helper with functional test.
 
         // Set by user.
         $expected = 'Murica/South';
-        $this->model->databaseTimezone = $expected;
-        $actual = $this->model->databaseTimezone();
+        $this->setDatabaseTimezone = $expected;
+        $actual = $this->callDatabaseTimezone();
         $this->assertEquals($expected, $actual);
     }
-
 }

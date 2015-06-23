@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Eloquent\Model;
-use JerseyMilker\Carbonated;
+use ThisVessel\Carbonated;
 
 class ExampleModel extends Illuminate\Database\Eloquent\Model
 {
