@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "JerseyMilker\\": "src/"
+            "ThisVessel\\": "src/"
         }
     },
     "autoload-dev": {

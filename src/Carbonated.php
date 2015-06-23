@@ -1,6 +1,6 @@
 <?php
 
-namespace JerseyMilker;
+namespace ThisVessel;
 
 use Carbon\Carbon;
 use Request;

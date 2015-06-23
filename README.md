@@ -38,7 +38,7 @@ Use Carbonated trait in your Eloquent model.
 ```php
 <?php namespace App;
 
-use JerseyMilker\Carbonated;
+use ThisVessel\Carbonated;
 
 class ServiceOrder extends Model {
 
