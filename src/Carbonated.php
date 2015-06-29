@@ -317,8 +317,11 @@ trait Carbonated
      */
     protected function carbonatedMutator($key, $value)
     {
+        // Get type.
+        $fieldType = $this->carbonatedAttributeType($key);
+
         // Get database format and timezone.
-        $databaseFormat = $this->databaseTimestampFormat();
+        $databaseFormat = $this->{'database' . ucfirst($fieldType) . 'Format'}();
         $databaseTimezone = $this->databaseTimezone();
 
         // If value is DateTime instance, convert to Carbon instance.
@@ -330,9 +333,6 @@ trait Carbonated
         if ($value instanceof Carbon) {
             return $value->timezone($databaseTimezone)->format($databaseFormat);
         }
-
-        // Otherwise, setup for mutator.
-        $fieldType = $this->carbonatedAttributeType($key);
 
         // Get input format and timezone for conversion.
         if (static::requestIsJson()) {
