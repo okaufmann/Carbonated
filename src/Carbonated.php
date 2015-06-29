@@ -334,7 +334,7 @@ trait Carbonated
             return $value->timezone($databaseTimezone)->format($databaseFormat);
         }
 
-        // Get input format and timezone for conversion.
+        // Otherwise, get input format and timezone for conversion.
         if (static::requestIsJson()) {
             $inputFormat = $this->{'json' . ucfirst($fieldType) . 'Format'}();
             $inputTimezone = $this->jsonTimezone();
