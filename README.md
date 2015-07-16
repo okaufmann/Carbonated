@@ -1,6 +1,6 @@
 # Carbonated
 
-[![Build Status](https://travis-ci.org/JesseLeite/Carbonated.svg)](https://travis-ci.org/JesseLeite/Carbonated)
+[![Build Status](https://travis-ci.org/ThisVessel/Carbonated.svg)](https://travis-ci.org/ThisVessel/Carbonated)
 
 An Eloquent model trait that offers flexible timestamp/date/time handling.
 
