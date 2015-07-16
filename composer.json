@@ -15,7 +15,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
-        "skagarwal/reflection": "dev-master"
+        "skagarwal/reflection": "dev-master",
+        "satooshi/php-coveralls": "dev-master"
     },
     "autoload": {
         "psr-4": {
