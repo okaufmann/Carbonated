@@ -255,7 +255,7 @@ trait Carbonated
 
         // Create Carbon instances.
         foreach ($fieldFormats as $field => $format) {
-            $value = $this->attributes[$field];
+            $value = isset($this->attributes[$field]) ? $this->attributes[$field] : null;
             $carbonInstance = $value ? Carbon::createFromFormat($format, $value, $databaseTimezone) : null;
             $carbonInstances[$field] = $carbonInstance ? $carbonInstance->timezone($carbonatedTimezone) : null;
         }
