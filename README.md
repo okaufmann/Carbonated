@@ -1,5 +1,7 @@
 # Carbonated
 
+**DISCLAIMER: This is a work in progress! Use at your own risk! When I am happy with API and test coverage, I will tag version. Suggestions welcome :)**
+
 [![Build Status](https://travis-ci.org/ThisVessel/Carbonated.svg)](https://travis-ci.org/ThisVessel/Carbonated)
 [![Coverage Status](https://coveralls.io/repos/ThisVessel/Carbonated/badge.svg?branch=master&service=github)](https://coveralls.io/github/ThisVessel/Carbonated?branch=master)
 
