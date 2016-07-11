@@ -31,7 +31,7 @@ trait Carbonated
         // Add default fields for schema builder's timestamps() and softDeletes().
         $defaults = [static::CREATED_AT, static::UPDATED_AT, 'deleted_at'];
 
-        return isset($this->carbonatedTimestamps) ? array_unique(array_merge($this->carbonatedTimestamps, $defaults)) : $defaults;
+        return $this->ensureProperty($this, 'carbonatedTimestamps') ? array_unique(array_merge($this->carbonatedTimestamps, $defaults)) : $defaults;
     }
 
     /**
@@ -41,7 +41,7 @@ trait Carbonated
      */
     public function carbonatedDates()
     {
-        return isset($this->carbonatedDates) ? (array) $this->carbonatedDates : [];
+        return $this->ensureProperty($this, 'carbonatedDates') ? (array) $this->carbonatedDates : [];
     }
 
     /**
@@ -51,7 +51,7 @@ trait Carbonated
      */
     public function carbonatedTimes()
     {
-        return isset($this->carbonatedTimes) ? (array) $this->carbonatedTimes : [];
+        return $this->ensureProperty($this, 'carbonatedTimes') ? (array) $this->carbonatedTimes : [];
     }
 
     /**
@@ -90,7 +90,7 @@ trait Carbonated
      */
     public function carbonatedTimestampFormat()
     {
-        return isset($this->carbonatedTimestampFormat) ? (string) $this->carbonatedTimestampFormat : 'M d, Y g:ia';
+        return $this->ensureProperty($this, 'carbonatedTimestampFormat') ? (string) $this->carbonatedTimestampFormat : 'M d, Y g:ia';
     }
 
     /**
@@ -100,7 +100,7 @@ trait Carbonated
      */
     public function carbonatedDateFormat()
     {
-        return isset($this->carbonatedDateFormat) ? (string) $this->carbonatedDateFormat : 'M d, Y';
+        return $this->ensureProperty($this, 'carbonatedDateFormat') ? (string) $this->carbonatedDateFormat : 'M d, Y';
     }
 
     /**
@@ -110,7 +110,7 @@ trait Carbonated
      */
     public function carbonatedTimeFormat()
     {
-        return isset($this->carbonatedTimeFormat) ? (string) $this->carbonatedTimeFormat : 'g:ia';
+        return $this->ensureProperty($this, 'carbonatedTimeFormat') ? (string) $this->carbonatedTimeFormat : 'g:ia';
     }
 
     /**
@@ -121,7 +121,7 @@ trait Carbonated
     public function carbonatedTimezone()
     {
         // Check for $carbonatedTimezone property in model.
-        if (isset($this->carbonatedTimezone)) {
+        if ($this->ensureProperty($this, 'carbonatedTimezone')) {
             return (string) $this->carbonatedTimezone;
         }
 
@@ -141,7 +141,7 @@ trait Carbonated
      */
     public function jsonTimestampFormat()
     {
-        return isset($this->jsonTimestampFormat) ? (string) $this->jsonTimestampFormat : $this->databaseTimestampFormat();
+        return $this->ensureProperty($this, 'jsonTimestampFormat') ? (string) $this->jsonTimestampFormat : $this->databaseTimestampFormat();
     }
 
     /**
@@ -151,7 +151,7 @@ trait Carbonated
      */
     public function jsonDateFormat()
     {
-        return isset($this->jsonDateFormat) ? (string) $this->jsonDateFormat : $this->databaseDateFormat();
+        return $this->ensureProperty($this, 'jsonDateFormat') ? (string) $this->jsonDateFormat : $this->databaseDateFormat();
     }
 
     /**
@@ -161,7 +161,7 @@ trait Carbonated
      */
     public function jsonTimeFormat()
     {
-        return isset($this->jsonTimeFormat) ? (string) $this->jsonTimeFormat : $this->databaseTimeFormat();
+        return $this->ensureProperty($this, 'jsonTimeFormat') ? (string) $this->jsonTimeFormat : $this->databaseTimeFormat();
     }
 
     /**
@@ -172,7 +172,7 @@ trait Carbonated
     public function jsonTimezone()
     {
         // Check for $jsonTimezone property in model.
-        if (isset($this->jsonTimezone)) {
+        if ($this->ensureProperty($this, 'jsonTimezone')) {
             return (string) $this->jsonTimezone;
         }
 
@@ -187,7 +187,7 @@ trait Carbonated
      */
     public function databaseTimestampFormat()
     {
-        return isset($this->databaseTimestampFormat) ? (string) $this->databaseTimestampFormat : 'Y-m-d H:i:s';
+        return $this->ensureProperty($this, 'databaseTimestampFormat') ? (string) $this->databaseTimestampFormat : 'Y-m-d H:i:s';
     }
 
     /**
@@ -197,7 +197,7 @@ trait Carbonated
      */
     public function databaseDateFormat()
     {
-        return isset($this->databaseDateFormat) ? (string) $this->databaseDateFormat : 'Y-m-d';
+        return $this->ensureProperty($this, 'databaseDateFormat') ? (string) $this->databaseDateFormat : 'Y-m-d';
     }
 
     /**
@@ -207,7 +207,7 @@ trait Carbonated
      */
     public function databaseTimeFormat()
     {
-        return isset($this->databaseTimeFormat) ? (string) $this->databaseTimeFormat : 'H:i:s';
+        return $this->ensureProperty($this, 'databaseTimeFormat') ? (string) $this->databaseTimeFormat : 'H:i:s';
     }
 
     /**
@@ -218,7 +218,7 @@ trait Carbonated
     public function databaseTimezone()
     {
         // Check for $databaseTimezone property in model.
-        if (isset($this->databaseTimezone)) {
+        if ($this->ensureProperty($this, 'databaseTimezone')) {
             return (string) $this->databaseTimezone;
         }
 
@@ -438,7 +438,7 @@ trait Carbonated
         if ($this->hasCast($key)) {
             $value = $this->castAttribute($key, $value);
         } elseif (in_array($key, $this->getDates())) {
-            if (!is_null($value)) {
+            if (! is_null($value)) {
                 return $this->asDateTime($value);
             }
         }
@@ -477,5 +477,20 @@ trait Carbonated
         }
 
         $this->attributes[$key] = $value;
+    }
+
+    private function ensureProperty($instance, $propertyName)
+    {
+        if(!property_exists($instance, $propertyName))
+        {
+            return false;
+        }
+
+        // Check property value for null and false values
+        if(empty($instance->{$propertyName})){
+            return false;
+        }
+
+        return true;
     }
 }
