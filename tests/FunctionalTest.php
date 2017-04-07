@@ -6,10 +6,8 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 // use Illuminate\Events\Dispatcher;
 // use Illuminate\Container\Container;
 
-class FunctionalTest extends PHPUnit_Framework_TestCase
+class FunctionalTest extends \PHPUnit\Framework\TestCase
 {
-    use ReflectableTrait;
-
     public $capsule;
     public $connection;
     public $carbon;
@@ -21,7 +19,7 @@ class FunctionalTest extends PHPUnit_Framework_TestCase
         if (! file_exists($sqlite)) {
             touch($sqlite);
         }
-        $this->capsule = new Capsule;
+        $this->capsule = new Capsule();
         $this->capsule->addConnection([
             'driver' => 'sqlite',
             'database' => $sqlite,
@@ -37,10 +35,4 @@ class FunctionalTest extends PHPUnit_Framework_TestCase
         // Setup Carbon instance.
         $this->carbon = Carbon::now();
     }
-
-    public function testSomthing()
-    {
-        //
-    }
-
 }

@@ -1,22 +1,25 @@
 {
-    "name": "thisvessel/carbonated",
+    "name": "okaufmann/carbonated",
     "description": "An Eloquent model trait that offers more flexible timestamp/date/time handling.",
     "authors": [
         {
             "name": "Jesse Leite",
             "email": "jesse@thisvessel.co"
+        },
+        {
+            "name": "Oliver Kaufmann",
+            "email": "okaufmann91@gmail.com"
         }
     ],
     "license": "MIT",
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.6.4",
         "illuminate/database": "5.*",
         "nesbot/carbon": "1.*"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.0",
-        "skagarwal/reflection": "dev-master",
-        "satooshi/php-coveralls": "dev-master"
+        "phpunit/phpunit" : "^6.0",
+        "orchestra/testbench": "~3.4.0"
     },
     "autoload": {
         "psr-4": {

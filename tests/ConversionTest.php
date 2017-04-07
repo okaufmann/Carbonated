@@ -4,10 +4,8 @@ use SKAgarwal\Reflection\ReflectableTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class ConversionTest extends PHPUnit_Framework_TestCase
+class ConversionTest extends \PHPUnit\Framework\TestCase
 {
-    use ReflectableTrait;
-
     public $carbon;
     public $dateTime;
 
