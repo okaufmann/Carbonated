@@ -291,7 +291,7 @@ trait Carbonated
      * @param  bool    $json
      * @return string
      */
-    protected function carbonatedAccessor($key, $json = false)
+    public function carbonatedAccessor($key, $json = false)
     {
         // Initial accesor setup.
         $accessorType = $json ? 'json' : 'carbonated';
@@ -315,7 +315,7 @@ trait Carbonated
      * @param  mixed   $value
      * @return string
      */
-    protected function carbonatedMutator($key, $value)
+    public function carbonatedMutator($key, $value)
     {
         // Get type.
         $fieldType = $this->carbonatedAttributeType($key);
