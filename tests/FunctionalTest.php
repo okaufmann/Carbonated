@@ -19,6 +19,10 @@ class FunctionalTest extends TestCase
     {
         parent::setUp();
 
+        $this->markTestSkipped(
+            'Functional tests are not yet implemented.'
+        );
+
         // Setup Eloquent and SQLite.
         $sqlite = 'tests/database/database.sqlite';
         if (!file_exists($sqlite)) {
@@ -39,5 +43,10 @@ class FunctionalTest extends TestCase
 
         // Setup Carbon instance.
         $this->carbon = Carbon::now();
+    }
+
+    public function testDbConnection()
+    {
+
     }
 }

@@ -25,4 +25,6 @@ class ExampleModel extends Illuminate\Database\Eloquent\Model
     public $databaseDateFormat;
     public $databaseTimeFormat;
     public $databaseTimezone;
+
+
 }

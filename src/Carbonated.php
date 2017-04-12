@@ -41,7 +41,7 @@ trait Carbonated
      */
     public function carbonatedDates()
     {
-        return $this->ensureProperty($this, 'carbonatedDates') ? (array) $this->carbonatedDates : [];
+        return $this->ensureProperty($this, 'carbonatedDates') ? (array)$this->carbonatedDates : [];
     }
 
     /**
@@ -51,7 +51,7 @@ trait Carbonated
      */
     public function carbonatedTimes()
     {
-        return $this->ensureProperty($this, 'carbonatedTimes') ? (array) $this->carbonatedTimes : [];
+        return $this->ensureProperty($this, 'carbonatedTimes') ? (array)$this->carbonatedTimes : [];
     }
 
     /**
@@ -67,7 +67,7 @@ trait Carbonated
     /**
      * Get carbonated attribute type.
      *
-     * @param  string  $key
+     * @param  string $key
      * @return string
      */
     public function carbonatedAttributeType($key)
@@ -90,7 +90,7 @@ trait Carbonated
      */
     public function carbonatedTimestampFormat()
     {
-        return $this->ensureProperty($this, 'carbonatedTimestampFormat') ? (string) $this->carbonatedTimestampFormat : 'M d, Y g:ia';
+        return $this->ensureProperty($this, 'carbonatedTimestampFormat') ? (string)$this->carbonatedTimestampFormat : 'M d, Y g:ia';
     }
 
     /**
@@ -100,7 +100,7 @@ trait Carbonated
      */
     public function carbonatedDateFormat()
     {
-        return $this->ensureProperty($this, 'carbonatedDateFormat') ? (string) $this->carbonatedDateFormat : 'M d, Y';
+        return $this->ensureProperty($this, 'carbonatedDateFormat') ? (string)$this->carbonatedDateFormat : 'M d, Y';
     }
 
     /**
@@ -110,7 +110,7 @@ trait Carbonated
      */
     public function carbonatedTimeFormat()
     {
-        return $this->ensureProperty($this, 'carbonatedTimeFormat') ? (string) $this->carbonatedTimeFormat : 'g:ia';
+        return $this->ensureProperty($this, 'carbonatedTimeFormat') ? (string)$this->carbonatedTimeFormat : 'g:ia';
     }
 
     /**
@@ -122,12 +122,10 @@ trait Carbonated
     {
         // Check for $carbonatedTimezone property in model.
         if ($this->ensureProperty($this, 'carbonatedTimezone')) {
-            return (string) $this->carbonatedTimezone;
-        }
-
-        // If not, check for an authenticated user with a $timezone property.
+            return (string)$this->carbonatedTimezone;
+        } // If not, check for an authenticated user with a $timezone property.
         elseif (class_exists(\Auth::class) && \Auth::check() && \Auth::user()->timezone) {
-            return (string) \Auth::user()->timezone;
+            return (string)\Auth::user()->timezone;
         }
 
         // Otherwise use same timezone as database.
@@ -141,7 +139,7 @@ trait Carbonated
      */
     public function jsonTimestampFormat()
     {
-        return $this->ensureProperty($this, 'jsonTimestampFormat') ? (string) $this->jsonTimestampFormat : $this->databaseTimestampFormat();
+        return $this->ensureProperty($this, 'jsonTimestampFormat') ? (string)$this->jsonTimestampFormat : $this->databaseTimestampFormat();
     }
 
     /**
@@ -151,7 +149,7 @@ trait Carbonated
      */
     public function jsonDateFormat()
     {
-        return $this->ensureProperty($this, 'jsonDateFormat') ? (string) $this->jsonDateFormat : $this->databaseDateFormat();
+        return $this->ensureProperty($this, 'jsonDateFormat') ? (string)$this->jsonDateFormat : $this->databaseDateFormat();
     }
 
     /**
@@ -161,7 +159,7 @@ trait Carbonated
      */
     public function jsonTimeFormat()
     {
-        return $this->ensureProperty($this, 'jsonTimeFormat') ? (string) $this->jsonTimeFormat : $this->databaseTimeFormat();
+        return $this->ensureProperty($this, 'jsonTimeFormat') ? (string)$this->jsonTimeFormat : $this->databaseTimeFormat();
     }
 
     /**
@@ -173,7 +171,7 @@ trait Carbonated
     {
         // Check for $jsonTimezone property in model.
         if ($this->ensureProperty($this, 'jsonTimezone')) {
-            return (string) $this->jsonTimezone;
+            return (string)$this->jsonTimezone;
         }
 
         // Otherwise use same timezone as database.
@@ -187,7 +185,7 @@ trait Carbonated
      */
     public function databaseTimestampFormat()
     {
-        return $this->ensureProperty($this, 'databaseTimestampFormat') ? (string) $this->databaseTimestampFormat : 'Y-m-d H:i:s';
+        return $this->ensureProperty($this, 'databaseTimestampFormat') ? (string)$this->databaseTimestampFormat : 'Y-m-d H:i:s';
     }
 
     /**
@@ -197,7 +195,7 @@ trait Carbonated
      */
     public function databaseDateFormat()
     {
-        return $this->ensureProperty($this, 'databaseDateFormat') ? (string) $this->databaseDateFormat : 'Y-m-d';
+        return $this->ensureProperty($this, 'databaseDateFormat') ? (string)$this->databaseDateFormat : 'Y-m-d';
     }
 
     /**
@@ -207,7 +205,7 @@ trait Carbonated
      */
     public function databaseTimeFormat()
     {
-        return $this->ensureProperty($this, 'databaseTimeFormat') ? (string) $this->databaseTimeFormat : 'H:i:s';
+        return $this->ensureProperty($this, 'databaseTimeFormat') ? (string)$this->databaseTimeFormat : 'H:i:s';
     }
 
     /**
@@ -219,11 +217,11 @@ trait Carbonated
     {
         // Check for $databaseTimezone property in model.
         if ($this->ensureProperty($this, 'databaseTimezone')) {
-            return (string) $this->databaseTimezone;
+            return (string)$this->databaseTimezone;
         }
 
         // Otherwise use app's timezone configuration.
-        return (string) function_exists('config') ? config('app.timezone') : 'UTC';
+        return (string)function_exists('config') ? config('app.timezone') : 'UTC';
     }
 
     /**
@@ -261,7 +259,7 @@ trait Carbonated
         }
 
         // Store Carbon instances for future use.
-        $this->carbonInstances = isset($carbonInstances) ? (object) $carbonInstances : null;
+        $this->carbonInstances = isset($carbonInstances) ? (object)$carbonInstances : null;
 
         // Return Carbon instances.
         return $this->carbonInstances;
@@ -287,8 +285,8 @@ trait Carbonated
     /**
      * Access and format for front end.
      *
-     * @param  string  $key
-     * @param  bool    $json
+     * @param  string $key
+     * @param  bool $json
      * @return string
      */
     public function carbonatedAccessor($key, $json = false)
@@ -298,8 +296,8 @@ trait Carbonated
         $fieldType = $this->carbonatedAttributeType($key);
 
         // Get output format and timezone for conversion.
-        $outputFormat = $this->{$accessorType . ucfirst($fieldType) . 'Format'}();
-        $outputTimezone = $this->{$accessorType . 'Timezone'}();
+        $outputFormat = $this->{$accessorType.ucfirst($fieldType).'Format'}();
+        $outputTimezone = $this->{$accessorType.'Timezone'}();
 
         // Get Carbon instance.
         $carbonInstance = $this->carbonInstances()->$key;
@@ -311,8 +309,8 @@ trait Carbonated
     /**
      * Mutate to a storable value for database.
      *
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param  string $key
+     * @param  mixed $value
      * @return string
      */
     public function carbonatedMutator($key, $value)
@@ -321,7 +319,7 @@ trait Carbonated
         $fieldType = $this->carbonatedAttributeType($key);
 
         // Get database format and timezone.
-        $databaseFormat = $this->{'database' . ucfirst($fieldType) . 'Format'}();
+        $databaseFormat = $this->{'database'.ucfirst($fieldType).'Format'}();
         $databaseTimezone = $this->databaseTimezone();
 
         // If value is DateTime instance, convert to Carbon instance.
@@ -336,10 +334,10 @@ trait Carbonated
 
         // Otherwise, get input format and timezone for conversion.
         if (static::requestIsJson()) {
-            $inputFormat = $this->{'json' . ucfirst($fieldType) . 'Format'}();
+            $inputFormat = $this->{'json'.ucfirst($fieldType).'Format'}();
             $inputTimezone = $this->jsonTimezone();
         } else {
-            $inputFormat = $this->{'carbonated' . ucfirst($fieldType) . 'Format'}();
+            $inputFormat = $this->{'carbonated'.ucfirst($fieldType).'Format'}();
             $inputTimezone = $this->carbonatedTimezone();
         }
 
@@ -367,7 +365,7 @@ trait Carbonated
      */
     public function getDates()
     {
-        return (array) $this->dates;
+        return (array)$this->dates;
     }
 
     /**
@@ -385,7 +383,7 @@ trait Carbonated
     /**
      * Override default toArray() to include our own accessors.
      *
-     * @param  bool  $useJsonAccessors
+     * @param  bool $useJsonAccessors
      * @return array
      */
     public function toArray($useJsonAccessors = false)
@@ -395,7 +393,7 @@ trait Carbonated
         // If returning JSON output, reference our own accessors for relevant date/time fields.
         if ($useJsonAccessors) {
             foreach ($attributes as $key => $value) {
-                if (! $this->hasGetMutator($key) && in_array($key, $this->carbonatedAttributes())) {
+                if (!$this->hasGetMutator($key) && in_array($key, $this->carbonatedAttributes())) {
                     $attributes[$key] = $this->carbonatedAccessor($key, true);
                 }
             }
@@ -417,7 +415,7 @@ trait Carbonated
     /**
      * Override default getAttributeValue() to include our own accessors.
      *
-     * @param  string  $key
+     * @param  string $key
      * @return mixed
      */
     public function getAttributeValue($key)
@@ -438,7 +436,7 @@ trait Carbonated
         if ($this->hasCast($key)) {
             $value = $this->castAttribute($key, $value);
         } elseif (in_array($key, $this->getDates())) {
-            if (! is_null($value)) {
+            if (!is_null($value)) {
                 return $this->asDateTime($value);
             }
         }
@@ -449,8 +447,8 @@ trait Carbonated
     /**
      * Override default setAttribute() to include our own mutators.
      *
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param  string $key
+     * @param  mixed $value
      * @return void
      */
     public function setAttribute($key, $value)
@@ -460,14 +458,10 @@ trait Carbonated
             $method = 'set'.studly_case($key).'Attribute';
 
             return $this->{$method}($value);
-        }
-
-        // If no mutator found, reference our own mutators for relevant date/time fields.
+        } // If no mutator found, reference our own mutators for relevant date/time fields.
         elseif (in_array($key, $this->carbonatedAttributes())) {
             $value = $this->carbonatedMutator($key, $value);
-        }
-
-        // Otherwise, revert to default Eloquent behavour.
+        } // Otherwise, revert to default Eloquent behavour.
         elseif (in_array($key, $this->getDates()) && $value) {
             $value = $this->fromDateTime($value);
         }
@@ -481,16 +475,26 @@ trait Carbonated
 
     private function ensureProperty($instance, $propertyName)
     {
-        if(!property_exists($instance, $propertyName))
-        {
+        if (!property_exists($instance, $propertyName)) {
             return false;
         }
 
         // Check property value for null and false values
-        if(empty($instance->{$propertyName})){
+        if (empty($instance->{$propertyName})) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * @param object $carbonInstances
+     */
+    public function setCarbonInstances($carbonInstances)
+    {
+        if (!is_object($carbonInstances)) {
+            throw new \InvalidArgumentException("carbonInstances must be an object.");
+        }
+        $this->carbonInstances = $carbonInstances;
     }
 }

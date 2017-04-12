@@ -25,7 +25,7 @@ class ConversionTest extends TestCase
         $this->model = new ExampleModel();
 
         // Setup Carbon instance.
-        $this->dateTime = new DateTime;
+        $this->dateTime = new DateTime();
         $this->carbon = Carbon::instance($this->dateTime);
     }
 
@@ -39,7 +39,7 @@ class ConversionTest extends TestCase
 
         // Configure field.
         $this->model->carbonatedTimestamps = ['completed_at'];
-        $this->model->carbonInstances = (object)['completed_at' => $this->carbon];
+        $this->model->setCarbonInstances((object)['completed_at' => $this->carbon]);
 
         // Assert conversion for view output.
         $expected = $this->carbon->timezone('America/Toronto')->format('M d, Y g:ia');
@@ -62,7 +62,7 @@ class ConversionTest extends TestCase
 
         // Configure field.
         $this->model->carbonatedDates = ['required_by'];
-        $this->model->carbonInstances = (object)['required_by' => $this->carbon];
+        $this->model->setCarbonInstances((object)['required_by' => $this->carbon]);
 
         // Assert conversion for view output.
         $expected = $this->carbon->timezone('America/Toronto')->format('M d, Y');
@@ -85,7 +85,7 @@ class ConversionTest extends TestCase
 
         // Configure field.
         $this->model->carbonatedTimes = ['pickup_time'];
-        $this->model->carbonInstances = (object)['pickup_time' => $this->carbon];
+        $this->model->setCarbonInstances((object)['pickup_time' => $this->carbon]);
 
         // Assert conversion for view output.
         $expected = $this->carbon->timezone('America/Toronto')->format('M d, Y');
@@ -103,10 +103,10 @@ class ConversionTest extends TestCase
         // Configure conversion.
         $this->model->carbonatedTimestampFormat = 'M d, Y g:i:s a';
         $this->model->jsonTimestampFormat = 'Y-m-d\TH:i:sP';
-        $this->model->DatabaseTimestampFormat = 'Y-m-d H:i:s';
+        $this->model->databaseTimestampFormat = 'Y-m-d H:i:s';
         $this->model->carbonatedTimezone = 'America/Toronto';
         $this->model->jsonTimezone = 'America/Vancouver';
-        $this->model->DatabaseTimezone = 'UTC';
+        $this->model->databaseTimezone = 'UTC';
 
         // Configure field.
         $this->model->carbonatedTimestamps = ['completed_at'];
