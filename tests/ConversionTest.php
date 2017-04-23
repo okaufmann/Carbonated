@@ -1,6 +1,5 @@
 <?php
 
-use Orchestra\Testbench\TestCase;
 use Carbon\Carbon;
 use Illuminate\Database\Capsule\Manager as Capsule;
 

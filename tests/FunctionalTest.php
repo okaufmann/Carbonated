@@ -2,7 +2,6 @@
 
 use Carbon\Carbon;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Orchestra\Testbench\TestCase;
 
 class FunctionalTest extends TestCase
 {

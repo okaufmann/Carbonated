@@ -300,10 +300,17 @@ trait Carbonated
         $outputTimezone = $this->{$accessorType.'Timezone'}();
 
         // Get Carbon instance.
+        /** @var Carbon $carbonInstance */
         $carbonInstance = $this->carbonInstances()->$key;
 
         // Return formatted value.
-        return $carbonInstance ? $carbonInstance->timezone($outputTimezone)->format($outputFormat) : null;
+        $timezonedInstance = $carbonInstance->timezone($outputTimezone);
+
+        if ($this->useLocalizedFormats()) {
+            return $carbonInstance ? $timezonedInstance->formatLocalized($outputFormat) : null;
+        }
+
+        return $carbonInstance ? $timezonedInstance->format($outputFormat) : null;
     }
 
     /**
@@ -473,6 +480,17 @@ trait Carbonated
         $this->attributes[$key] = $value;
     }
 
+    /**
+     * @param object $carbonInstances
+     */
+    public function setCarbonInstances($carbonInstances)
+    {
+        if (!is_object($carbonInstances)) {
+            throw new \InvalidArgumentException("carbonInstances must be an object.");
+        }
+        $this->carbonInstances = $carbonInstances;
+    }
+
     private function ensureProperty($instance, $propertyName)
     {
         if (!property_exists($instance, $propertyName)) {
@@ -487,14 +505,10 @@ trait Carbonated
         return true;
     }
 
-    /**
-     * @param object $carbonInstances
-     */
-    public function setCarbonInstances($carbonInstances)
+    private function useLocalizedFormats()
     {
-        if (!is_object($carbonInstances)) {
-            throw new \InvalidArgumentException("carbonInstances must be an object.");
-        }
-        $this->carbonInstances = $carbonInstances;
+        $localize = config('carbonated.localization', false);
+        return $localize;
     }
+
 }
