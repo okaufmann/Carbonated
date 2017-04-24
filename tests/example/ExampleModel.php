@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Eloquent\Model;
 use ThisVessel\Carbonated;
 
 class ExampleModel extends Illuminate\Database\Eloquent\Model
