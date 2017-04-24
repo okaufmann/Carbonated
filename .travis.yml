@@ -6,6 +6,7 @@ php:
 
 before_script:
   - sudo apt-get update && sudo apt-get --reinstall install -qq language-pack-de language-pack-fr
+  - locale -a
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-dist
 
