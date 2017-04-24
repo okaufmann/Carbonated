@@ -1,7 +1,6 @@
 <?php
 
 use Carbon\Carbon;
-use Illuminate\Database\Capsule\Manager as Capsule;
 
 class ConversionTest extends TestCase
 {
@@ -38,7 +37,7 @@ class ConversionTest extends TestCase
 
         // Configure field.
         $this->model->carbonatedTimestamps = ['completed_at'];
-        $this->model->setCarbonInstances((object)['completed_at' => $this->carbon]);
+        $this->model->setCarbonInstances((object) ['completed_at' => $this->carbon]);
 
         // Assert conversion for view output.
         $expected = $this->carbon->timezone('America/Toronto')->format('M d, Y g:ia');
@@ -61,7 +60,7 @@ class ConversionTest extends TestCase
 
         // Configure field.
         $this->model->carbonatedDates = ['required_by'];
-        $this->model->setCarbonInstances((object)['required_by' => $this->carbon]);
+        $this->model->setCarbonInstances((object) ['required_by' => $this->carbon]);
 
         // Assert conversion for view output.
         $expected = $this->carbon->timezone('America/Toronto')->format('M d, Y');
@@ -84,7 +83,7 @@ class ConversionTest extends TestCase
 
         // Configure field.
         $this->model->carbonatedTimes = ['pickup_time'];
-        $this->model->setCarbonInstances((object)['pickup_time' => $this->carbon]);
+        $this->model->setCarbonInstances((object) ['pickup_time' => $this->carbon]);
 
         // Assert conversion for view output.
         $expected = $this->carbon->timezone('America/Toronto')->format('M d, Y');
@@ -131,5 +130,4 @@ class ConversionTest extends TestCase
         // $actual = $this->model->carbonatedMutator('completed_at', $input);
         // $this->assertEquals($expected, $actual);
     }
-
 }

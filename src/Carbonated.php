@@ -41,7 +41,7 @@ trait Carbonated
      */
     public function carbonatedDates()
     {
-        return $this->ensureProperty($this, 'carbonatedDates') ? (array)$this->carbonatedDates : [];
+        return $this->ensureProperty($this, 'carbonatedDates') ? (array) $this->carbonatedDates : [];
     }
 
     /**
@@ -51,7 +51,7 @@ trait Carbonated
      */
     public function carbonatedTimes()
     {
-        return $this->ensureProperty($this, 'carbonatedTimes') ? (array)$this->carbonatedTimes : [];
+        return $this->ensureProperty($this, 'carbonatedTimes') ? (array) $this->carbonatedTimes : [];
     }
 
     /**
@@ -67,7 +67,8 @@ trait Carbonated
     /**
      * Get carbonated attribute type.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return string
      */
     public function carbonatedAttributeType($key)
@@ -90,7 +91,7 @@ trait Carbonated
      */
     public function carbonatedTimestampFormat()
     {
-        return $this->ensureProperty($this, 'carbonatedTimestampFormat') ? (string)$this->carbonatedTimestampFormat : 'M d, Y g:ia';
+        return $this->ensureProperty($this, 'carbonatedTimestampFormat') ? (string) $this->carbonatedTimestampFormat : 'M d, Y g:ia';
     }
 
     /**
@@ -100,7 +101,7 @@ trait Carbonated
      */
     public function carbonatedDateFormat()
     {
-        return $this->ensureProperty($this, 'carbonatedDateFormat') ? (string)$this->carbonatedDateFormat : 'M d, Y';
+        return $this->ensureProperty($this, 'carbonatedDateFormat') ? (string) $this->carbonatedDateFormat : 'M d, Y';
     }
 
     /**
@@ -110,7 +111,7 @@ trait Carbonated
      */
     public function carbonatedTimeFormat()
     {
-        return $this->ensureProperty($this, 'carbonatedTimeFormat') ? (string)$this->carbonatedTimeFormat : 'g:ia';
+        return $this->ensureProperty($this, 'carbonatedTimeFormat') ? (string) $this->carbonatedTimeFormat : 'g:ia';
     }
 
     /**
@@ -122,10 +123,10 @@ trait Carbonated
     {
         // Check for $carbonatedTimezone property in model.
         if ($this->ensureProperty($this, 'carbonatedTimezone')) {
-            return (string)$this->carbonatedTimezone;
+            return (string) $this->carbonatedTimezone;
         } // If not, check for an authenticated user with a $timezone property.
         elseif (class_exists(\Auth::class) && \Auth::check() && \Auth::user()->timezone) {
-            return (string)\Auth::user()->timezone;
+            return (string) \Auth::user()->timezone;
         }
 
         // Otherwise use same timezone as database.
@@ -139,7 +140,7 @@ trait Carbonated
      */
     public function jsonTimestampFormat()
     {
-        return $this->ensureProperty($this, 'jsonTimestampFormat') ? (string)$this->jsonTimestampFormat : $this->databaseTimestampFormat();
+        return $this->ensureProperty($this, 'jsonTimestampFormat') ? (string) $this->jsonTimestampFormat : $this->databaseTimestampFormat();
     }
 
     /**
@@ -149,7 +150,7 @@ trait Carbonated
      */
     public function jsonDateFormat()
     {
-        return $this->ensureProperty($this, 'jsonDateFormat') ? (string)$this->jsonDateFormat : $this->databaseDateFormat();
+        return $this->ensureProperty($this, 'jsonDateFormat') ? (string) $this->jsonDateFormat : $this->databaseDateFormat();
     }
 
     /**
@@ -159,7 +160,7 @@ trait Carbonated
      */
     public function jsonTimeFormat()
     {
-        return $this->ensureProperty($this, 'jsonTimeFormat') ? (string)$this->jsonTimeFormat : $this->databaseTimeFormat();
+        return $this->ensureProperty($this, 'jsonTimeFormat') ? (string) $this->jsonTimeFormat : $this->databaseTimeFormat();
     }
 
     /**
@@ -171,7 +172,7 @@ trait Carbonated
     {
         // Check for $jsonTimezone property in model.
         if ($this->ensureProperty($this, 'jsonTimezone')) {
-            return (string)$this->jsonTimezone;
+            return (string) $this->jsonTimezone;
         }
 
         // Otherwise use same timezone as database.
@@ -185,7 +186,7 @@ trait Carbonated
      */
     public function databaseTimestampFormat()
     {
-        return $this->ensureProperty($this, 'databaseTimestampFormat') ? (string)$this->databaseTimestampFormat : 'Y-m-d H:i:s';
+        return $this->ensureProperty($this, 'databaseTimestampFormat') ? (string) $this->databaseTimestampFormat : 'Y-m-d H:i:s';
     }
 
     /**
@@ -195,7 +196,7 @@ trait Carbonated
      */
     public function databaseDateFormat()
     {
-        return $this->ensureProperty($this, 'databaseDateFormat') ? (string)$this->databaseDateFormat : 'Y-m-d';
+        return $this->ensureProperty($this, 'databaseDateFormat') ? (string) $this->databaseDateFormat : 'Y-m-d';
     }
 
     /**
@@ -205,7 +206,7 @@ trait Carbonated
      */
     public function databaseTimeFormat()
     {
-        return $this->ensureProperty($this, 'databaseTimeFormat') ? (string)$this->databaseTimeFormat : 'H:i:s';
+        return $this->ensureProperty($this, 'databaseTimeFormat') ? (string) $this->databaseTimeFormat : 'H:i:s';
     }
 
     /**
@@ -217,11 +218,11 @@ trait Carbonated
     {
         // Check for $databaseTimezone property in model.
         if ($this->ensureProperty($this, 'databaseTimezone')) {
-            return (string)$this->databaseTimezone;
+            return (string) $this->databaseTimezone;
         }
 
         // Otherwise use app's timezone configuration.
-        return (string)function_exists('config') ? config('app.timezone') : 'UTC';
+        return (string) function_exists('config') ? config('app.timezone') : 'UTC';
     }
 
     /**
@@ -259,7 +260,7 @@ trait Carbonated
         }
 
         // Store Carbon instances for future use.
-        $this->carbonInstances = isset($carbonInstances) ? (object)$carbonInstances : null;
+        $this->carbonInstances = isset($carbonInstances) ? (object) $carbonInstances : null;
 
         // Return Carbon instances.
         return $this->carbonInstances;
@@ -285,8 +286,9 @@ trait Carbonated
     /**
      * Access and format for front end.
      *
-     * @param  string $key
-     * @param  bool $json
+     * @param string $key
+     * @param bool   $json
+     *
      * @return string
      */
     public function carbonatedAccessor($key, $json = false)
@@ -316,8 +318,9 @@ trait Carbonated
     /**
      * Mutate to a storable value for database.
      *
-     * @param  string $key
-     * @param  mixed $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return string
      */
     public function carbonatedMutator($key, $value)
@@ -372,7 +375,7 @@ trait Carbonated
      */
     public function getDates()
     {
-        return (array)$this->dates;
+        return (array) $this->dates;
     }
 
     /**
@@ -390,7 +393,8 @@ trait Carbonated
     /**
      * Override default toArray() to include our own accessors.
      *
-     * @param  bool $useJsonAccessors
+     * @param bool $useJsonAccessors
+     *
      * @return array
      */
     public function toArray($useJsonAccessors = false)
@@ -422,7 +426,8 @@ trait Carbonated
     /**
      * Override default getAttributeValue() to include our own accessors.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return mixed
      */
     public function getAttributeValue($key)
@@ -454,8 +459,9 @@ trait Carbonated
     /**
      * Override default setAttribute() to include our own mutators.
      *
-     * @param  string $key
-     * @param  mixed $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return void
      */
     public function setAttribute($key, $value)
@@ -486,7 +492,7 @@ trait Carbonated
     public function setCarbonInstances($carbonInstances)
     {
         if (!is_object($carbonInstances)) {
-            throw new \InvalidArgumentException("carbonInstances must be an object.");
+            throw new \InvalidArgumentException('carbonInstances must be an object.');
         }
         $this->carbonInstances = $carbonInstances;
     }
@@ -508,7 +514,7 @@ trait Carbonated
     private function useLocalizedFormats()
     {
         $localize = config('carbonated.localization', false);
+
         return $localize;
     }
-
 }
