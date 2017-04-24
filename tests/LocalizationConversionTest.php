@@ -39,11 +39,11 @@ class LocalizationConversionTest extends TestCase
     public function testLocalizedGermanDay()
     {
         // Arrange
-        setlocale(LC_TIME, 'de', 'de_CH.UTF8', 'de_CH');
+        $this->setLocaleOrSkip('de_DE');
 
         $this->model->carbonatedTimestampFormat = '%A';
         $this->model->carbonatedTimestamps = ['completed_at'];
-        $this->model->setCarbonInstances((object) ['completed_at' => $this->carbon]);
+        $this->model->setCarbonInstances((object)['completed_at' => $this->carbon]);
 
         // Act
         $actual = $this->model->carbonatedAccessor('completed_at');
@@ -56,11 +56,11 @@ class LocalizationConversionTest extends TestCase
     public function testLocalizedGermanDate()
     {
         // Arrange
-        setlocale(LC_TIME, 'de', 'de_CH.UTF8', 'de_CH');
+        $this->setLocaleOrSkip('de_DE');
 
         $this->model->carbonatedTimestampFormat = '%A, %d %B %Y';
         $this->model->carbonatedTimestamps = ['completed_at'];
-        $this->model->setCarbonInstances((object) ['completed_at' => $this->carbon]);
+        $this->model->setCarbonInstances((object)['completed_at' => $this->carbon]);
 
         // Act
         $actual = $this->model->carbonatedAccessor('completed_at');
@@ -72,18 +72,12 @@ class LocalizationConversionTest extends TestCase
 
     public function testLocalizedFrenchDay()
     {
-        if (!LocaleHelper::localeExists('fr')) {
-            $this->markTestSkipped(
-                'French is not installed on this system. You can install further locales like: https://askubuntu.com/a/76106'
-            );
-        }
-
         // Arrange
-        setlocale(LC_TIME, 'fr', 'fr_FR.UTF8', 'fr_FR');
+        $this->setLocaleOrSkip('fr_FR');
 
         $this->model->carbonatedTimestampFormat = '%A';
         $this->model->carbonatedTimestamps = ['completed_at'];
-        $this->model->setCarbonInstances((object) ['completed_at' => $this->carbon]);
+        $this->model->setCarbonInstances((object)['completed_at' => $this->carbon]);
 
         // Act
         $actual = $this->model->carbonatedAccessor('completed_at');
@@ -95,18 +89,12 @@ class LocalizationConversionTest extends TestCase
 
     public function testLocalizedFrenchDate()
     {
-        if (!LocaleHelper::localeExists('fr')) {
-            $this->markTestSkipped(
-                'French is not installed on this system. You can install further locales like: https://askubuntu.com/a/76106'
-            );
-        }
-
         // Arrange
-        setlocale(LC_TIME, 'fr', 'fr_FR.UTF8', 'fr_FR');
+        $this->setLocaleOrSkip('fr_FR');
 
         $this->model->carbonatedTimestampFormat = '%A, %d %B %Y';
         $this->model->carbonatedTimestamps = ['completed_at'];
-        $this->model->setCarbonInstances((object) ['completed_at' => $this->carbon]);
+        $this->model->setCarbonInstances((object)['completed_at' => $this->carbon]);
 
         // Act
         $actual = $this->model->carbonatedAccessor('completed_at');
@@ -114,5 +102,16 @@ class LocalizationConversionTest extends TestCase
         // Assert
         $expected = 'dimanche, 01 janvier 2017';
         $this->assertEquals($expected, $actual);
+    }
+
+    private function setLocaleOrSkip($locale)
+    {
+        if (!LocaleHelper::localeExists($locale)) {
+            $this->markTestSkipped(
+                `$locale is not installed on this system. You can install further locales like: https://askubuntu.com/a/76106`
+            );
+        }
+
+        setlocale(LC_TIME, $locale);
     }
 }

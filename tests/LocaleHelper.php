@@ -430,10 +430,6 @@ class LocaleHelper
                 return true;
             }
 
-            if (str_contains($item['locale'], $locale)) {
-                return true;
-            }
-
             return false;
         });
 
