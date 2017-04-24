@@ -67,7 +67,8 @@ trait Carbonated
     /**
      * Get carbonated attribute type.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return string
      */
     public function carbonatedAttributeType($key)
@@ -287,8 +288,9 @@ trait Carbonated
     /**
      * Access and format for front end.
      *
-     * @param  string  $key
-     * @param  bool    $json
+     * @param string $key
+     * @param bool   $json
+     *
      * @return string
      */
     protected function carbonatedAccessor($key, $json = false)
@@ -298,8 +300,8 @@ trait Carbonated
         $fieldType = $this->carbonatedAttributeType($key);
 
         // Get output format and timezone for conversion.
-        $outputFormat = $this->{$accessorType . ucfirst($fieldType) . 'Format'}();
-        $outputTimezone = $this->{$accessorType . 'Timezone'}();
+        $outputFormat = $this->{$accessorType.ucfirst($fieldType).'Format'}();
+        $outputTimezone = $this->{$accessorType.'Timezone'}();
 
         // Get Carbon instance.
         $carbonInstance = $this->carbonInstances()->$key;
@@ -311,8 +313,9 @@ trait Carbonated
     /**
      * Mutate to a storable value for database.
      *
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return string
      */
     protected function carbonatedMutator($key, $value)
@@ -321,7 +324,7 @@ trait Carbonated
         $fieldType = $this->carbonatedAttributeType($key);
 
         // Get database format and timezone.
-        $databaseFormat = $this->{'database' . ucfirst($fieldType) . 'Format'}();
+        $databaseFormat = $this->{'database'.ucfirst($fieldType).'Format'}();
         $databaseTimezone = $this->databaseTimezone();
 
         // If value is DateTime instance, convert to Carbon instance.
@@ -336,10 +339,10 @@ trait Carbonated
 
         // Otherwise, get input format and timezone for conversion.
         if (static::requestIsJson()) {
-            $inputFormat = $this->{'json' . ucfirst($fieldType) . 'Format'}();
+            $inputFormat = $this->{'json'.ucfirst($fieldType).'Format'}();
             $inputTimezone = $this->jsonTimezone();
         } else {
-            $inputFormat = $this->{'carbonated' . ucfirst($fieldType) . 'Format'}();
+            $inputFormat = $this->{'carbonated'.ucfirst($fieldType).'Format'}();
             $inputTimezone = $this->carbonatedTimezone();
         }
 
@@ -385,7 +388,8 @@ trait Carbonated
     /**
      * Override default toArray() to include our own accessors.
      *
-     * @param  bool  $useJsonAccessors
+     * @param bool $useJsonAccessors
+     *
      * @return array
      */
     public function toArray($useJsonAccessors = false)
@@ -395,7 +399,7 @@ trait Carbonated
         // If returning JSON output, reference our own accessors for relevant date/time fields.
         if ($useJsonAccessors) {
             foreach ($attributes as $key => $value) {
-                if (! $this->hasGetMutator($key) && in_array($key, $this->carbonatedAttributes())) {
+                if (!$this->hasGetMutator($key) && in_array($key, $this->carbonatedAttributes())) {
                     $attributes[$key] = $this->carbonatedAccessor($key, true);
                 }
             }
@@ -417,7 +421,8 @@ trait Carbonated
     /**
      * Override default getAttributeValue() to include our own accessors.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return mixed
      */
     public function getAttributeValue($key)
@@ -438,7 +443,7 @@ trait Carbonated
         if ($this->hasCast($key)) {
             $value = $this->castAttribute($key, $value);
         } elseif (in_array($key, $this->getDates())) {
-            if (! is_null($value)) {
+            if (!is_null($value)) {
                 return $this->asDateTime($value);
             }
         }
@@ -449,8 +454,9 @@ trait Carbonated
     /**
      * Override default setAttribute() to include our own mutators.
      *
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return void
      */
     public function setAttribute($key, $value)
@@ -481,13 +487,12 @@ trait Carbonated
 
     private function ensureProperty($instance, $propertyName)
     {
-        if(!property_exists($instance, $propertyName))
-        {
+        if (!property_exists($instance, $propertyName)) {
             return false;
         }
 
         // Check property value for null and false values
-        if(empty($instance->{$propertyName})){
+        if (empty($instance->{$propertyName})) {
             return false;
         }
 

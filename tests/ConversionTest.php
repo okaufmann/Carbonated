@@ -1,8 +1,7 @@
 <?php
 
-use SKAgarwal\Reflection\ReflectableTrait;
 use Carbon\Carbon;
-use Illuminate\Database\Capsule\Manager as Capsule;
+use SKAgarwal\Reflection\ReflectableTrait;
 
 class ConversionTest extends PHPUnit_Framework_TestCase
 {
@@ -14,10 +13,10 @@ class ConversionTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         // Setup ExampleModel.
-        $this->reflect(new ExampleModel);
+        $this->reflect(new ExampleModel());
 
         // Setup Carbon instance.
-        $this->dateTime = new DateTime;
+        $this->dateTime = new DateTime();
         $this->carbon = Carbon::instance($this->dateTime);
     }
 
@@ -124,5 +123,4 @@ class ConversionTest extends PHPUnit_Framework_TestCase
         // $actual = $this->callCarbonatedMutator('completed_at', $input);
         // $this->assertEquals($expected, $actual);
     }
-
 }

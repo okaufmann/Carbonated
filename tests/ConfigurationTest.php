@@ -9,7 +9,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         // Setup ExampleModel.
-        $this->reflect(new ExampleModel);
+        $this->reflect(new ExampleModel());
     }
 
     public function testCarbonatedTimestamps()
