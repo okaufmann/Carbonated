@@ -9,12 +9,10 @@
  * @version 1.0
  */
 
-
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
-
     public function setUp()
     {
         parent::setUp();

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Eloquent\Model;
 use ThisVessel\Carbonated;
 
 class ExampleModel extends Illuminate\Database\Eloquent\Model
@@ -25,6 +24,4 @@ class ExampleModel extends Illuminate\Database\Eloquent\Model
     public $databaseDateFormat;
     public $databaseTimeFormat;
     public $databaseTimezone;
-
-
 }
