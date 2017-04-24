@@ -43,7 +43,7 @@ class LocalizationConversionTest extends TestCase
 
         $this->model->carbonatedTimestampFormat = '%A';
         $this->model->carbonatedTimestamps = ['completed_at'];
-        $this->model->setCarbonInstances((object)['completed_at' => $this->carbon]);
+        $this->model->setCarbonInstances((object) ['completed_at' => $this->carbon]);
 
         // Act
         $actual = $this->model->carbonatedAccessor('completed_at');
@@ -60,7 +60,7 @@ class LocalizationConversionTest extends TestCase
 
         $this->model->carbonatedTimestampFormat = '%A, %d %B %Y';
         $this->model->carbonatedTimestamps = ['completed_at'];
-        $this->model->setCarbonInstances((object)['completed_at' => $this->carbon]);
+        $this->model->setCarbonInstances((object) ['completed_at' => $this->carbon]);
 
         // Act
         $actual = $this->model->carbonatedAccessor('completed_at');
@@ -77,7 +77,7 @@ class LocalizationConversionTest extends TestCase
 
         $this->model->carbonatedTimestampFormat = '%A';
         $this->model->carbonatedTimestamps = ['completed_at'];
-        $this->model->setCarbonInstances((object)['completed_at' => $this->carbon]);
+        $this->model->setCarbonInstances((object) ['completed_at' => $this->carbon]);
 
         // Act
         $actual = $this->model->carbonatedAccessor('completed_at');
@@ -94,7 +94,7 @@ class LocalizationConversionTest extends TestCase
 
         $this->model->carbonatedTimestampFormat = '%A, %d %B %Y';
         $this->model->carbonatedTimestamps = ['completed_at'];
-        $this->model->setCarbonInstances((object)['completed_at' => $this->carbon]);
+        $this->model->setCarbonInstances((object) ['completed_at' => $this->carbon]);
 
         // Act
         $actual = $this->model->carbonatedAccessor('completed_at');
