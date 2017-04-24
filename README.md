@@ -2,8 +2,9 @@
 
 **DISCLAIMER: This is a work in progress! Use at your own risk! When I am happy with API and test coverage, I will tag version. Suggestions welcome :)**
 
-[![Build Status](https://travis-ci.org/ThisVessel/Carbonated.svg)](https://travis-ci.org/ThisVessel/Carbonated)
-[![Coverage Status](https://coveralls.io/repos/ThisVessel/Carbonated/badge.svg?branch=master&service=github)](https://coveralls.io/github/ThisVessel/Carbonated?branch=master)
+[![Build Status](https://travis-ci.org/okaufmann/Carbonated.svg?branch=master)](https://travis-ci.org/okaufmann/Carbonated)
+[![Quality Score](https://img.shields.io/scrutinizer/g/okaufmann/Carbonated.svg?style=flat-square)](https://scrutinizer-ci.com/g/okaufmann/Carbonated)
+[![StyleCI](https://styleci.io/repos/63108601/shield?branch=master)](https://styleci.io/repos/63108601)
 
 An Eloquent model trait that offers flexible timestamp/date/time handling.
 
@@ -16,7 +17,7 @@ Eloquent provides DateTime handling through [Date Mutators](http://laravel.com/d
 - [Customization](#customization)
 - [Timezone Conversion](#timezone-conversion)
 
-# Feature Overview
+## Feature Overview
 
 - Automatic accessors and mutators for timestamp, date, and time fields.
 - Set output formatting once in your model.
@@ -24,20 +25,21 @@ Eloquent provides DateTime handling through [Date Mutators](http://laravel.com/d
 - Carbon instances are still available when you need to `format()` output.
 - Timezone support with automatic conversion between database and front end.
 - Plays friendly with [form generators](https://github.com/adamwathan/form) that use [model binding](https://github.com/adamwathan/form#model-binding).
+- Localizable Dates (cause Carbon use strftime internally, you have to change the placeholders. http://www.php.net/strftime)
 
-# Requirements
+## Requirements
 
 - [Laravel 5.0+](http://laravel.com) or [illuminate/database 5.0+](https://github.com/illuminate/database/tree/master)
 
-# Installation
+## Installation
 
 Via [Composer](https://getcomposer.org):
 ```
-composer require 'thisvessel/carbonated:dev-master'
+composer require 'okaufmann/carbonated:dev-master'
 ```
 Note: I will tag version as soon I've added sufficient test coverage.
 
-# Basic Usage
+## Basic Usage
 
 Use Carbonated trait in your Eloquent model.
 ```php
@@ -71,7 +73,7 @@ If you need access to raw carbon instances, the `withCarbon` attribute returns a
 {{ $serviceOrder->withCarbon->required_by->format('M Y') }}
 ```
 
-# Customization
+## Customization
 
 Customize view output format by adding these properties to your model.
 ```php
@@ -102,7 +104,7 @@ public function getRequiredByAttribute($value)
 }
 ```
 
-# Timezone Conversion
+## Timezone Conversion
 
 Carbonated supports automatic timezone conversion between your database and front end.  For example, maybe you are storing as `UTC` in your database, but want to output as `America/Toronto`.
 
@@ -131,3 +133,12 @@ If either `$carbonatedTimezone` or `$jsonTimezone` are undefined, `$databaseTime
 If `$databaseTimezone` is undefined, the app's timezone (found in `/config/app.php`) will be used as a fallback.
 
 If you are using Carbonated with Eloquent outside of Laravel, `$databaseTimezone` will fallback to `UTC`.
+
+## Localization
+
+If you need to print your dates with days of week, you can enable Localization. 
+
+```php
+public $carbonatedLocalizedFormats = true; 
+```
+If this is set, Carbonated will use http://www.php.net/strftime to format date strings. Follow the docs to choose placeholdes (the %A ones...).

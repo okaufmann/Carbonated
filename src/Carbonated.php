@@ -124,9 +124,7 @@ trait Carbonated
         // Check for $carbonatedTimezone property in model.
         if ($this->ensureProperty($this, 'carbonatedTimezone')) {
             return (string) $this->carbonatedTimezone;
-        }
-
-        // If not, check for an authenticated user with a $timezone property.
+        } // If not, check for an authenticated user with a $timezone property.
         elseif (class_exists(\Auth::class) && \Auth::check() && \Auth::user()->timezone) {
             return (string) \Auth::user()->timezone;
         }
@@ -293,7 +291,7 @@ trait Carbonated
      *
      * @return string
      */
-    protected function carbonatedAccessor($key, $json = false)
+    public function carbonatedAccessor($key, $json = false)
     {
         // Initial accesor setup.
         $accessorType = $json ? 'json' : 'carbonated';
@@ -304,10 +302,17 @@ trait Carbonated
         $outputTimezone = $this->{$accessorType.'Timezone'}();
 
         // Get Carbon instance.
+        /** @var Carbon $carbonInstance */
         $carbonInstance = $this->carbonInstances()->$key;
 
         // Return formatted value.
-        return $carbonInstance ? $carbonInstance->timezone($outputTimezone)->format($outputFormat) : null;
+        $timezonedInstance = $carbonInstance->timezone($outputTimezone);
+
+        if ($this->useLocalizedFormats()) {
+            return $carbonInstance ? $timezonedInstance->formatLocalized($outputFormat) : null;
+        }
+
+        return $carbonInstance ? $timezonedInstance->format($outputFormat) : null;
     }
 
     /**
@@ -318,7 +323,7 @@ trait Carbonated
      *
      * @return string
      */
-    protected function carbonatedMutator($key, $value)
+    public function carbonatedMutator($key, $value)
     {
         // Get type.
         $fieldType = $this->carbonatedAttributeType($key);
@@ -466,14 +471,10 @@ trait Carbonated
             $method = 'set'.studly_case($key).'Attribute';
 
             return $this->{$method}($value);
-        }
-
-        // If no mutator found, reference our own mutators for relevant date/time fields.
+        } // If no mutator found, reference our own mutators for relevant date/time fields.
         elseif (in_array($key, $this->carbonatedAttributes())) {
             $value = $this->carbonatedMutator($key, $value);
-        }
-
-        // Otherwise, revert to default Eloquent behavour.
+        } // Otherwise, revert to default Eloquent behavour.
         elseif (in_array($key, $this->getDates()) && $value) {
             $value = $this->fromDateTime($value);
         }
@@ -483,6 +484,17 @@ trait Carbonated
         }
 
         $this->attributes[$key] = $value;
+    }
+
+    /**
+     * @param object $carbonInstances
+     */
+    public function setCarbonInstances($carbonInstances)
+    {
+        if (!is_object($carbonInstances)) {
+            throw new \InvalidArgumentException('carbonInstances must be an object.');
+        }
+        $this->carbonInstances = $carbonInstances;
     }
 
     private function ensureProperty($instance, $propertyName)
@@ -497,5 +509,12 @@ trait Carbonated
         }
 
         return true;
+    }
+
+    private function useLocalizedFormats()
+    {
+        $localize = config('carbonated.localization', false);
+
+        return $localize;
     }
 }

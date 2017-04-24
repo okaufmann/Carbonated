@@ -2,21 +2,26 @@
 
 use Carbon\Carbon;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use SKAgarwal\Reflection\ReflectableTrait;
 
-// use Illuminate\Events\Dispatcher;
-// use Illuminate\Container\Container;
-
-class FunctionalTest extends PHPUnit_Framework_TestCase
+class FunctionalTest extends TestCase
 {
-    use ReflectableTrait;
-
     public $capsule;
     public $connection;
     public $carbon;
 
+    /**
+     * @var ExampleModel
+     */
+    public $model;
+
     public function setUp()
     {
+        parent::setUp();
+
+        $this->markTestSkipped(
+            'Functional tests are not yet implemented.'
+        );
+
         // Setup Eloquent and SQLite.
         $sqlite = 'tests/database/database.sqlite';
         if (!file_exists($sqlite)) {
@@ -33,14 +38,13 @@ class FunctionalTest extends PHPUnit_Framework_TestCase
         $this->connection = $this->capsule->getConnection('default');
 
         // Setup ExampleModel.
-        $this->reflect(new ExampleModel());
+        $this->model = new ExampleModel();
 
         // Setup Carbon instance.
         $this->carbon = Carbon::now();
     }
 
-    public function testSomthing()
+    public function testDbConnection()
     {
-        //
     }
 }
