@@ -2,8 +2,9 @@
 
 **DISCLAIMER: This is a work in progress! Use at your own risk! When I am happy with API and test coverage, I will tag version. Suggestions welcome :)**
 
-[![Build Status](https://travis-ci.org/ThisVessel/Carbonated.svg)](https://travis-ci.org/ThisVessel/Carbonated)
-[![Coverage Status](https://coveralls.io/repos/ThisVessel/Carbonated/badge.svg?branch=master&service=github)](https://coveralls.io/github/ThisVessel/Carbonated?branch=master)
+[![Build Status](https://travis-ci.org/okaufmann/Carbonated.svg?branch=master)](https://travis-ci.org/okaufmann/Carbonated)
+[![Quality Score](https://img.shields.io/scrutinizer/g/okaufmann/Carbonated.svg?style=flat-square)](https://scrutinizer-ci.com/g/okaufmann/Carbonated)
+[![StyleCI](https://styleci.io/repos/63108601/shield?branch=master)](https://styleci.io/repos/63108601)
 
 An Eloquent model trait that offers flexible timestamp/date/time handling.
 
