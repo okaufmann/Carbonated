@@ -241,6 +241,8 @@ trait Carbonated
         $databaseTimezone = $this->databaseTimezone();
         $carbonatedTimezone = $this->carbonatedTimezone();
 
+        $fieldFormats = [];
+
         // Get database field formats.
         foreach ($this->carbonatedTimestamps() as $field) {
             $fieldFormats[$field] = $this->databaseTimestampFormat();
