@@ -241,6 +241,8 @@ trait Carbonated
         $databaseTimezone = $this->databaseTimezone();
         $carbonatedTimezone = $this->carbonatedTimezone();
 
+        $fieldFormats = [];
+
         // Get database field formats.
         foreach ($this->carbonatedTimestamps() as $field) {
             $fieldFormats[$field] = $this->databaseTimestampFormat();
@@ -253,6 +255,7 @@ trait Carbonated
         }
 
         // Create Carbon instances.
+        $carbonInstances = [];
         foreach ($fieldFormats as $field => $format) {
             $value = isset($this->attributes[$field]) ? $this->attributes[$field] : null;
             $carbonInstance = $value ? Carbon::createFromFormat($format, $value, $databaseTimezone) : null;
@@ -365,7 +368,7 @@ trait Carbonated
      */
     public static function requestIsJson()
     {
-        return str_contains(Request::header('CONTENT_TYPE'), 'json');
+        return request()->isJson();
     }
 
     /**

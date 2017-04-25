@@ -29,7 +29,7 @@ Eloquent provides DateTime handling through [Date Mutators](http://laravel.com/d
 
 ## Requirements
 
-- [Laravel 5.0+](http://laravel.com) or [illuminate/database 5.0+](https://github.com/illuminate/database/tree/master)
+-  [PHP](https://php.net) 7.0+ and [Laravel 5.0+](http://laravel.com) or [illuminate/database 5.0+](https://github.com/illuminate/database/tree/master)
 
 ## Installation
 
@@ -38,6 +38,28 @@ Via [Composer](https://getcomposer.org):
 composer require 'okaufmann/carbonated:dev-master'
 ```
 Note: I will tag version as soon I've added sufficient test coverage.
+
+## Configuration
+
+Register the Service Provider
+
+```php
+// config/app.php
+'providers' => [
+    ...
+    ThisVessel\CarbonatedServiceProvider::class,
+];
+```
+
+Carbonated provides a configuration example.
+
+So you can test publishing assets with:
+
+```bash
+$ php artisan vendor:publish --provider="ThisVessel\CarbonatedServiceProvider"
+```
+
+This will create a `config/carbonated.php` file in your app that you can modify to set your configuration. Also, make sure you check for changes to the original config file in this package between releases.
 
 ## Basic Usage
 
@@ -136,7 +158,7 @@ If you are using Carbonated with Eloquent outside of Laravel, `$databaseTimezone
 
 ## Localization
 
-If you need to print your dates with days of week, you can enable Localization. 
+If you need to display your dates with days of week, you can enable Localization. 
 
 ```php
 public $carbonatedLocalizedFormats = true; 
