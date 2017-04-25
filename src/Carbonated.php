@@ -365,7 +365,7 @@ trait Carbonated
      */
     public static function requestIsJson()
     {
-        return str_contains(Request::header('CONTENT_TYPE'), 'json');
+        return request()->isJson();
     }
 
     /**
