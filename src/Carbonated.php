@@ -308,6 +308,10 @@ trait Carbonated
         /** @var Carbon $carbonInstance */
         $carbonInstance = $this->carbonInstances()->$key;
 
+        if (!$carbonInstance) {
+            return;
+        }
+
         // Return formatted value.
         $timezonedInstance = $carbonInstance->timezone($outputTimezone);
 
