@@ -316,7 +316,7 @@ trait Carbonated
         $timezonedInstance = $carbonInstance->timezone($outputTimezone);
 
         if ($this->useLocalizedFormats()) {
-            return $carbonInstance ? $timezonedInstance->formatLocalized($outputFormat) : null;
+            return $timezonedInstance ? utf8_encode($timezonedInstance->formatLocalized($outputFormat)) : null;
         }
 
         return $carbonInstance ? $timezonedInstance->format($outputFormat) : null;
