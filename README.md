@@ -158,9 +158,14 @@ If you are using Carbonated with Eloquent outside of Laravel, `$databaseTimezone
 
 ## Localization
 
-If you need to display your dates with days of week, you can enable Localization. 
+If you need to display your dates with days of week, you can enable Localization in config file `config/carbonated.php`. 
 
 ```php
-public $carbonatedLocalizedFormats = true; 
+return [
+    /*
+     * Format dates with carbons formatLocalized method to localize ex. weekday.
+     */
+    'localization' => true,
+];
 ```
 If this is set, Carbonated will use http://www.php.net/strftime to format date strings. Follow the docs to choose placeholdes (the %A ones...).
