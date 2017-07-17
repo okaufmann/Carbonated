@@ -35,7 +35,7 @@ Eloquent provides DateTime handling through [Date Mutators](http://laravel.com/d
 
 Via [Composer](https://getcomposer.org):
 ```
-composer require 'okaufmann/carbonated:dev-master'
+composer require okaufmann/carbonated
 ```
 Note: I will tag version as soon I've added sufficient test coverage.
 
